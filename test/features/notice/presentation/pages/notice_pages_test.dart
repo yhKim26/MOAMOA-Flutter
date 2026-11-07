@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:go_router/go_router.dart';
+import 'package:moamoa/core/theme/moa_theme.dart';
 import 'package:moamoa/features/group/domain/repositories/group_repository.dart';
 import 'package:moamoa/features/notice/domain/entities/notice.dart';
 import 'package:moamoa/features/notice/domain/entities/notice_exception.dart';
@@ -153,6 +154,65 @@ void main() {
       await tester.pumpAndSettle();
 
       expect(repository.getNoticesCallCount, 2);
+    });
+
+    testWidgets('관리자에게는 공지마다 읽은 수를 보여준다', (tester) async {
+      await pumpPage(
+        tester,
+        FakeNoticeRepository(
+          notices: [buildNotice(1, readCount: 6, totalCount: 8)],
+        ),
+        page,
+        myRole: FakeGroupMyRole.admin(),
+      );
+      await tester.pumpAndSettle();
+
+      expect(find.text('읽음 6/8'), findsOneWidget);
+    });
+
+    testWidgets('일반 구성원에게는 읽은 수를 보여주지 않는다', (tester) async {
+      await pumpPage(
+        tester,
+        FakeNoticeRepository(
+          notices: [buildNotice(1, readCount: 6, totalCount: 8)],
+        ),
+        page,
+      );
+      await tester.pumpAndSettle();
+
+      expect(find.text('읽음 6/8'), findsNothing);
+    });
+
+    testWidgets('아직 안 읽은 구성원이 있으면 읽은 수를 굵은 파란색으로 보여준다', (tester) async {
+      await pumpPage(
+        tester,
+        FakeNoticeRepository(
+          notices: [buildNotice(1, readCount: 6, totalCount: 8)],
+        ),
+        page,
+        myRole: FakeGroupMyRole.admin(),
+      );
+      await tester.pumpAndSettle();
+
+      final text = tester.widget<Text>(find.text('읽음 6/8'));
+      expect(text.style?.color, MoaColors.accentText);
+      expect(text.style?.fontWeight, FontWeight.w600);
+    });
+
+    testWidgets('모두 읽었으면 읽은 수를 회색으로 보여준다', (tester) async {
+      await pumpPage(
+        tester,
+        FakeNoticeRepository(
+          notices: [buildNotice(1, readCount: 8, totalCount: 8)],
+        ),
+        page,
+        myRole: FakeGroupMyRole.admin(),
+      );
+      await tester.pumpAndSettle();
+
+      final text = tester.widget<Text>(find.text('읽음 8/8'));
+      expect(text.style?.color, MoaColors.textTertiary);
+      expect(text.style?.fontWeight, FontWeight.w400);
     });
   });
 

@@ -1,3 +1,5 @@
+import '../domain/entities/notice.dart';
+
 /// 상세 화면의 작성일. 연도까지 항상 표시합니다. (예: 2026년 9월 12일)
 String formatNoticeDate(DateTime date) {
   return '${date.year}년 ${date.month}월 ${date.day}일';
@@ -18,4 +20,18 @@ String formatNoticeRelative(DateTime createdAt, {DateTime? now}) {
   if (diff.inDays < 30) return '${diff.inDays ~/ 7}주 전';
   if (diff.inDays < 365) return '${diff.inDays ~/ 30}개월 전';
   return '${diff.inDays ~/ 365}년 전';
+}
+
+/// 목록의 읽음 현황 표시 값 (3-2 readCount / totalCount)
+extension NoticeReadCountX on Notice {
+  /// "읽음 6/8". 읽은 수를 받지 못했으면 null 입니다.
+  String? get readCountLabel {
+    final readCount = this.readCount;
+    final totalCount = this.totalCount;
+    if (readCount == null || totalCount == null) return null;
+    return '읽음 $readCount/$totalCount';
+  }
+
+  /// 모든 구성원이 읽었는지
+  bool get isReadByAll => readCount != null && readCount == totalCount;
 }

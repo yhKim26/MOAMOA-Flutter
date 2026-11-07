@@ -7,12 +7,20 @@ import 'package:moamoa/features/notice/domain/entities/notice_reads.dart';
 import 'package:moamoa/features/notice/domain/repositories/notice_repository.dart';
 
 /// 테스트용 공지 생성 헬퍼
-Notice buildNotice(int id, {String? title, String? content}) {
+Notice buildNotice(
+  int id, {
+  String? title,
+  String? content,
+  int? readCount,
+  int? totalCount,
+}) {
   return Notice(
     id: id,
     title: title ?? '공지 $id',
     content: content,
     createdAt: DateTime(2026, 10, 1).add(Duration(days: id)),
+    readCount: readCount,
+    totalCount: totalCount,
   );
 }
 

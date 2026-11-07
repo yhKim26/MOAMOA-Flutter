@@ -1,4 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
+import 'package:moamoa/features/notice/domain/entities/notice.dart';
 import 'package:moamoa/features/notice/presentation/notice_format.dart';
 
 void main() {
@@ -76,6 +77,40 @@ void main() {
     test('365일부터 년 단위로 표시해 365일은 1년 전, 800일은 2년 전으로 표시한다', () {
       expect(format(const Duration(days: 365)), '1년 전');
       expect(format(const Duration(days: 800)), '2년 전');
+    });
+  });
+
+  group('NoticeReadCountX', () {
+    Notice notice({int? readCount, int? totalCount}) => Notice(
+      id: 1,
+      title: '공지',
+      createdAt: DateTime(2026, 10, 1),
+      readCount: readCount,
+      totalCount: totalCount,
+    );
+
+    test('읽은 수와 전체 수를 읽음 6/8 로 표시한다', () {
+      expect(notice(readCount: 6, totalCount: 8).readCountLabel, '읽음 6/8');
+    });
+
+    test('읽은 수를 받지 못했으면 표시하지 않는다', () {
+      expect(notice().readCountLabel, isNull);
+    });
+
+    test('전체 수만 받지 못했어도 표시하지 않는다', () {
+      expect(notice(readCount: 6).readCountLabel, isNull);
+    });
+
+    test('읽은 수와 전체 수가 같으면 모두 읽은 것으로 본다', () {
+      expect(notice(readCount: 8, totalCount: 8).isReadByAll, isTrue);
+    });
+
+    test('읽은 수가 전체 수보다 적으면 모두 읽은 것이 아니다', () {
+      expect(notice(readCount: 6, totalCount: 8).isReadByAll, isFalse);
+    });
+
+    test('읽은 수를 받지 못했으면 모두 읽은 것이 아니다', () {
+      expect(notice().isReadByAll, isFalse);
     });
   });
 }
