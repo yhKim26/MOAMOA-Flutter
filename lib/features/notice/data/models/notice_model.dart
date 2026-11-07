@@ -15,6 +15,12 @@ abstract class NoticeModel with _$NoticeModel {
     /// ISO-8601 (KST, 예: 2026-10-07T10:00:00+09:00)
     required String createdAt,
     String? content,
+
+    /// 목록(3-2)에만 있습니다. 공지를 읽은 현재 구성원 수
+    int? readCount,
+
+    /// 목록(3-2)에만 있습니다. 현재 모임 구성원 수
+    int? totalCount,
   }) = _NoticeModel;
 
   factory NoticeModel.fromJson(Map<String, dynamic> json) =>
@@ -30,5 +36,7 @@ extension NoticeModelX on NoticeModel {
     title: title,
     content: content,
     createdAt: DateTime.parse(createdAt).toLocal(),
+    readCount: readCount,
+    totalCount: totalCount,
   );
 }

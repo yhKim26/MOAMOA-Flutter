@@ -17,7 +17,9 @@ T _$identity<T>(T value) => value;
 mixin _$NoticeModel {
 
  int get noticeId; String get title;/// ISO-8601 (KST, 예: 2026-10-07T10:00:00+09:00)
- String get createdAt; String? get content;
+ String get createdAt; String? get content;/// 목록(3-2)에만 있습니다. 공지를 읽은 현재 구성원 수
+ int? get readCount;/// 목록(3-2)에만 있습니다. 현재 모임 구성원 수
+ int? get totalCount;
 /// Create a copy of NoticeModel
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -30,16 +32,16 @@ $NoticeModelCopyWith<NoticeModel> get copyWith => _$NoticeModelCopyWithImpl<Noti
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is NoticeModel&&(identical(other.noticeId, noticeId) || other.noticeId == noticeId)&&(identical(other.title, title) || other.title == title)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt)&&(identical(other.content, content) || other.content == content));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is NoticeModel&&(identical(other.noticeId, noticeId) || other.noticeId == noticeId)&&(identical(other.title, title) || other.title == title)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt)&&(identical(other.content, content) || other.content == content)&&(identical(other.readCount, readCount) || other.readCount == readCount)&&(identical(other.totalCount, totalCount) || other.totalCount == totalCount));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,noticeId,title,createdAt,content);
+int get hashCode => Object.hash(runtimeType,noticeId,title,createdAt,content,readCount,totalCount);
 
 @override
 String toString() {
-  return 'NoticeModel(noticeId: $noticeId, title: $title, createdAt: $createdAt, content: $content)';
+  return 'NoticeModel(noticeId: $noticeId, title: $title, createdAt: $createdAt, content: $content, readCount: $readCount, totalCount: $totalCount)';
 }
 
 
@@ -50,7 +52,7 @@ abstract mixin class $NoticeModelCopyWith<$Res>  {
   factory $NoticeModelCopyWith(NoticeModel value, $Res Function(NoticeModel) _then) = _$NoticeModelCopyWithImpl;
 @useResult
 $Res call({
- int noticeId, String title, String createdAt, String? content
+ int noticeId, String title, String createdAt, String? content, int? readCount, int? totalCount
 });
 
 
@@ -67,13 +69,15 @@ class _$NoticeModelCopyWithImpl<$Res>
 
 /// Create a copy of NoticeModel
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? noticeId = null,Object? title = null,Object? createdAt = null,Object? content = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? noticeId = null,Object? title = null,Object? createdAt = null,Object? content = freezed,Object? readCount = freezed,Object? totalCount = freezed,}) {
   return _then(NoticeModel(
 noticeId: null == noticeId ? _self.noticeId : noticeId // ignore: cast_nullable_to_non_nullable
 as int,title: null == title ? _self.title : title // ignore: cast_nullable_to_non_nullable
 as String,createdAt: null == createdAt ? _self.createdAt : createdAt // ignore: cast_nullable_to_non_nullable
 as String,content: freezed == content ? _self.content : content // ignore: cast_nullable_to_non_nullable
-as String?,
+as String?,readCount: freezed == readCount ? _self.readCount : readCount // ignore: cast_nullable_to_non_nullable
+as int?,totalCount: freezed == totalCount ? _self.totalCount : totalCount // ignore: cast_nullable_to_non_nullable
+as int?,
   ));
 }
 
@@ -158,10 +162,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( int noticeId,  String title,  String createdAt,  String? content)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( int noticeId,  String title,  String createdAt,  String? content,  int? readCount,  int? totalCount)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _NoticeModel() when $default != null:
-return $default(_that.noticeId,_that.title,_that.createdAt,_that.content);case _:
+return $default(_that.noticeId,_that.title,_that.createdAt,_that.content,_that.readCount,_that.totalCount);case _:
   return orElse();
 
 }
@@ -179,10 +183,10 @@ return $default(_that.noticeId,_that.title,_that.createdAt,_that.content);case _
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( int noticeId,  String title,  String createdAt,  String? content)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( int noticeId,  String title,  String createdAt,  String? content,  int? readCount,  int? totalCount)  $default,) {final _that = this;
 switch (_that) {
 case _NoticeModel():
-return $default(_that.noticeId,_that.title,_that.createdAt,_that.content);case _:
+return $default(_that.noticeId,_that.title,_that.createdAt,_that.content,_that.readCount,_that.totalCount);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -199,10 +203,10 @@ return $default(_that.noticeId,_that.title,_that.createdAt,_that.content);case _
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( int noticeId,  String title,  String createdAt,  String? content)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( int noticeId,  String title,  String createdAt,  String? content,  int? readCount,  int? totalCount)?  $default,) {final _that = this;
 switch (_that) {
 case _NoticeModel() when $default != null:
-return $default(_that.noticeId,_that.title,_that.createdAt,_that.content);case _:
+return $default(_that.noticeId,_that.title,_that.createdAt,_that.content,_that.readCount,_that.totalCount);case _:
   return null;
 
 }
@@ -214,7 +218,7 @@ return $default(_that.noticeId,_that.title,_that.createdAt,_that.content);case _
 @JsonSerializable()
 
 class _NoticeModel implements NoticeModel {
-  const _NoticeModel({required this.noticeId, required this.title, required this.createdAt, this.content});
+  const _NoticeModel({required this.noticeId, required this.title, required this.createdAt, this.content, this.readCount, this.totalCount});
   factory _NoticeModel.fromJson(Map<String, dynamic> json) => _$NoticeModelFromJson(json);
 
 @override final  int noticeId;
@@ -222,6 +226,10 @@ class _NoticeModel implements NoticeModel {
 /// ISO-8601 (KST, 예: 2026-10-07T10:00:00+09:00)
 @override final  String createdAt;
 @override final  String? content;
+/// 목록(3-2)에만 있습니다. 공지를 읽은 현재 구성원 수
+@override final  int? readCount;
+/// 목록(3-2)에만 있습니다. 현재 모임 구성원 수
+@override final  int? totalCount;
 
 /// Create a copy of NoticeModel
 /// with the given fields replaced by the non-null parameter values.
@@ -236,16 +244,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _NoticeModel&&(identical(other.noticeId, noticeId) || other.noticeId == noticeId)&&(identical(other.title, title) || other.title == title)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt)&&(identical(other.content, content) || other.content == content));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _NoticeModel&&(identical(other.noticeId, noticeId) || other.noticeId == noticeId)&&(identical(other.title, title) || other.title == title)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt)&&(identical(other.content, content) || other.content == content)&&(identical(other.readCount, readCount) || other.readCount == readCount)&&(identical(other.totalCount, totalCount) || other.totalCount == totalCount));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,noticeId,title,createdAt,content);
+int get hashCode => Object.hash(runtimeType,noticeId,title,createdAt,content,readCount,totalCount);
 
 @override
 String toString() {
-  return 'NoticeModel(noticeId: $noticeId, title: $title, createdAt: $createdAt, content: $content)';
+  return 'NoticeModel(noticeId: $noticeId, title: $title, createdAt: $createdAt, content: $content, readCount: $readCount, totalCount: $totalCount)';
 }
 
 
@@ -256,7 +264,7 @@ abstract mixin class _$NoticeModelCopyWith<$Res> implements $NoticeModelCopyWith
   factory _$NoticeModelCopyWith(_NoticeModel value, $Res Function(_NoticeModel) _then) = __$NoticeModelCopyWithImpl;
 @override @useResult
 $Res call({
- int noticeId, String title, String createdAt, String? content
+ int noticeId, String title, String createdAt, String? content, int? readCount, int? totalCount
 });
 
 
@@ -273,13 +281,15 @@ class __$NoticeModelCopyWithImpl<$Res>
 
 /// Create a copy of NoticeModel
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? noticeId = null,Object? title = null,Object? createdAt = null,Object? content = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? noticeId = null,Object? title = null,Object? createdAt = null,Object? content = freezed,Object? readCount = freezed,Object? totalCount = freezed,}) {
   return _then(_NoticeModel(
 noticeId: null == noticeId ? _self.noticeId : noticeId // ignore: cast_nullable_to_non_nullable
 as int,title: null == title ? _self.title : title // ignore: cast_nullable_to_non_nullable
 as String,createdAt: null == createdAt ? _self.createdAt : createdAt // ignore: cast_nullable_to_non_nullable
 as String,content: freezed == content ? _self.content : content // ignore: cast_nullable_to_non_nullable
-as String?,
+as String?,readCount: freezed == readCount ? _self.readCount : readCount // ignore: cast_nullable_to_non_nullable
+as int?,totalCount: freezed == totalCount ? _self.totalCount : totalCount // ignore: cast_nullable_to_non_nullable
+as int?,
   ));
 }
 

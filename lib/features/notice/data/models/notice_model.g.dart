@@ -11,6 +11,8 @@ _NoticeModel _$NoticeModelFromJson(Map<String, dynamic> json) => _NoticeModel(
   title: json['title'] as String,
   createdAt: json['createdAt'] as String,
   content: json['content'] as String?,
+  readCount: (json['readCount'] as num?)?.toInt(),
+  totalCount: (json['totalCount'] as num?)?.toInt(),
 );
 
 Map<String, dynamic> _$NoticeModelToJson(_NoticeModel instance) =>
@@ -19,4 +21,6 @@ Map<String, dynamic> _$NoticeModelToJson(_NoticeModel instance) =>
       'title': instance.title,
       'createdAt': instance.createdAt,
       'content': instance.content,
+      'readCount': instance.readCount,
+      'totalCount': instance.totalCount,
     };

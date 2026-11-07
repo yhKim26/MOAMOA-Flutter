@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:moamoa/features/notice/domain/entities/notice.dart';
 import 'package:moamoa/features/notice/domain/entities/notice_exception.dart';
 import 'package:moamoa/features/notice/domain/entities/notice_list_result.dart';
+import 'package:moamoa/features/notice/domain/entities/notice_reads.dart';
 import 'package:moamoa/features/notice/domain/repositories/notice_repository.dart';
 
 /// 테스트용 공지 생성 헬퍼
@@ -46,6 +47,9 @@ class FakeNoticeRepository implements NoticeRepository {
 
   /// 값이 있으면 markNoticeRead 만 이 예외를 던집니다. (상세 조회는 성공하고 읽음만 실패하는 상황)
   NoticeException? readError;
+
+  /// getNoticeReadsByNoticeId 가 돌려줄 공지별 읽음 현황. 없으면 아무도 읽지 않은 현황을 돌려줍니다.
+  final Map<int, NoticeReads> readsByNoticeId = {};
 
   int _nextId = 1000;
 
@@ -145,5 +149,21 @@ class FakeNoticeRepository implements NoticeRepository {
   }) async {
     readNoticeIds.add(noticeId);
     if (readError != null) throw readError!;
+  }
+
+  @override
+  Future<NoticeReads> getNoticeReadsByNoticeId({
+    required int meetingId,
+    required int noticeId,
+  }) async {
+    _throwIfError();
+    _indexOf(noticeId);
+    return readsByNoticeId[noticeId] ??
+        const NoticeReads(
+          readCount: 0,
+          totalCount: 0,
+          readMembers: [],
+          unreadMembers: [],
+        );
   }
 }
