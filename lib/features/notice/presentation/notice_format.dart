@@ -42,3 +42,17 @@ extension NoticeMetaX on Notice {
     return '${author.userName.profileDisplayName} · $time';
   }
 }
+
+/// 목록의 읽음 현황 표시 값 (3-2 readCount / totalCount)
+extension NoticeReadCountX on Notice {
+  /// "읽음 6/8". 읽은 수를 받지 못했으면 null 입니다.
+  String? get readCountLabel {
+    final readCount = this.readCount;
+    final totalCount = this.totalCount;
+    if (readCount == null || totalCount == null) return null;
+    return '읽음 $readCount/$totalCount';
+  }
+
+  /// 모든 구성원이 읽었는지
+  bool get isReadByAll => readCount != null && readCount == totalCount;
+}

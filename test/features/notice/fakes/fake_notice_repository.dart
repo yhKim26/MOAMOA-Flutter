@@ -13,6 +13,8 @@ Notice buildNotice(
   String? title,
   String? content,
   NoticeAuthor? author,
+  int? readCount,
+  int? totalCount,
 }) {
   return Notice(
     id: id,
@@ -20,6 +22,8 @@ Notice buildNotice(
     content: content,
     createdAt: DateTime(2026, 10, 1).add(Duration(days: id)),
     author: author,
+    readCount: readCount,
+    totalCount: totalCount,
   );
 }
 

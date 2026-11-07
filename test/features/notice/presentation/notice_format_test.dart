@@ -124,4 +124,38 @@ void main() {
       expect(notice.detailMeta, '2026년 9월 12일');
     });
   });
+
+  group('NoticeReadCountX', () {
+    Notice notice({int? readCount, int? totalCount}) => Notice(
+      id: 1,
+      title: '공지',
+      createdAt: DateTime(2026, 10, 1),
+      readCount: readCount,
+      totalCount: totalCount,
+    );
+
+    test('읽은 수와 전체 수를 읽음 6/8 로 표시한다', () {
+      expect(notice(readCount: 6, totalCount: 8).readCountLabel, '읽음 6/8');
+    });
+
+    test('읽은 수를 받지 못했으면 표시하지 않는다', () {
+      expect(notice().readCountLabel, isNull);
+    });
+
+    test('전체 수만 받지 못했어도 표시하지 않는다', () {
+      expect(notice(readCount: 6).readCountLabel, isNull);
+    });
+
+    test('읽은 수와 전체 수가 같으면 모두 읽은 것으로 본다', () {
+      expect(notice(readCount: 8, totalCount: 8).isReadByAll, isTrue);
+    });
+
+    test('읽은 수가 전체 수보다 적으면 모두 읽은 것이 아니다', () {
+      expect(notice(readCount: 6, totalCount: 8).isReadByAll, isFalse);
+    });
+
+    test('읽은 수를 받지 못했으면 모두 읽은 것이 아니다', () {
+      expect(notice().isReadByAll, isFalse);
+    });
+  });
 }
