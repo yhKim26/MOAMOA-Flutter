@@ -6,12 +6,12 @@ import 'package:moamoa/core/utils/moa_snack_bar.dart';
 import 'package:moamoa/core/widgets/moa_error_widget.dart';
 
 import '../../domain/entities/notice.dart';
+import '../../domain/entities/notice_detail_request.dart';
 import '../notice_error.dart';
 import '../notice_format.dart';
 import '../providers/notice_providers.dart';
 import '../viewmodels/notice_delete_state.dart';
 import '../viewmodels/notice_delete_status.dart';
-import '../viewmodels/notice_detail_view_model.dart';
 import '../widgets/notice_colors.dart';
 import '../widgets/notice_role_retry_button.dart';
 
@@ -26,7 +26,8 @@ class NoticeDetailPage extends ConsumerWidget {
   final int meetingId;
   final int noticeId;
 
-  NoticeDetailArgs get _args => (meetingId: meetingId, noticeId: noticeId);
+  NoticeDetailRequest get _request =>
+      NoticeDetailRequest(meetingId: meetingId, noticeId: noticeId);
 
   /// 이 모임의 공지 목록 경로
   String get _listPath => '/meetings/$meetingId/notices';
@@ -44,7 +45,7 @@ class NoticeDetailPage extends ConsumerWidget {
     );
     if (confirmed != true || !context.mounted) return;
 
-    await ref.read(noticeDeleteProvider(_args).notifier).delete();
+    await ref.read(noticeDeleteProvider(_request).notifier).delete();
   }
 
   void _onDeleteStateChanged(BuildContext context, NoticeDeleteState next) {
@@ -68,11 +69,11 @@ class NoticeDetailPage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     ref.listen(
-      noticeDeleteProvider(_args),
+      noticeDeleteProvider(_request),
       (_, next) => _onDeleteStateChanged(context, next),
     );
-    final notice = ref.watch(noticeDetailProvider(_args));
-    final isDeleting = ref.watch(noticeDeleteProvider(_args)).isDeleting;
+    final notice = ref.watch(noticeDetailProvider(_request));
+    final isDeleting = ref.watch(noticeDeleteProvider(_request)).isDeleting;
     final access = ref.watch(noticeWriteAccessProvider(meetingId));
     final canWrite = access.canWrite;
 
@@ -106,7 +107,8 @@ class NoticeDetailPage extends ConsumerWidget {
                 )
               : MoaErrorWidget(
                   message: noticeErrorMessage(error),
-                  onAction: () => ref.invalidate(noticeDetailProvider(_args)),
+                  onAction: () =>
+                      ref.invalidate(noticeDetailProvider(_request)),
                 ),
         ),
       ),

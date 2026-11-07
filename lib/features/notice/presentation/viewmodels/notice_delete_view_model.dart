@@ -4,15 +4,17 @@ import '../../domain/usecases/delete_notice.dart';
 import '../providers/notice_providers.dart';
 import 'notice_delete_state.dart';
 import 'notice_delete_status.dart';
-import 'notice_detail_view_model.dart';
 
-/// 공지 삭제 ViewModel (family 인자: 상세와 같은 [NoticeDetailArgs])
+/// 공지 삭제 ViewModel (family 인자: 상세와 같은 NoticeDetailRequest)
 ///
 /// 삭제 결과는 반환하지 않고 [NoticeDeleteState] 의 단계로 알립니다.
 class NoticeDeleteViewModel extends Notifier<NoticeDeleteState> {
-  NoticeDeleteViewModel({required NoticeDetailArgs args}) : _args = args;
+  NoticeDeleteViewModel({required int meetingId, required int noticeId})
+    : _meetingId = meetingId,
+      _noticeId = noticeId;
 
-  final NoticeDetailArgs _args;
+  final int _meetingId;
+  final int _noticeId;
 
   @override
   NoticeDeleteState build() => const NoticeDeleteState();
@@ -28,12 +30,9 @@ class NoticeDeleteViewModel extends Notifier<NoticeDeleteState> {
     final keepAlive = ref.keepAlive();
     try {
       await ref.read(deleteNoticeProvider)(
-        DeleteNoticeParams(
-          meetingId: _args.meetingId,
-          noticeId: _args.noticeId,
-        ),
+        DeleteNoticeParams(meetingId: _meetingId, noticeId: _noticeId),
       );
-      ref.invalidate(noticeListProvider(_args.meetingId));
+      ref.invalidate(noticeListProvider(_meetingId));
       state = const NoticeDeleteState(status: NoticeDeleteStatus.success);
     } catch (error) {
       state = NoticeDeleteState(

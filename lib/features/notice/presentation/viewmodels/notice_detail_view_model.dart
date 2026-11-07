@@ -8,14 +8,14 @@ import '../../domain/usecases/get_notice_detail.dart';
 import '../../domain/usecases/mark_notice_read.dart';
 import '../providers/notice_providers.dart';
 
-/// 공지 상세 · 삭제의 family 인자
-typedef NoticeDetailArgs = ({int meetingId, int noticeId});
-
 /// 공지 상세 ViewModel
 class NoticeDetailViewModel extends AsyncNotifier<Notice> {
-  NoticeDetailViewModel({required NoticeDetailArgs args}) : _args = args;
+  NoticeDetailViewModel({required int meetingId, required int noticeId})
+    : _meetingId = meetingId,
+      _noticeId = noticeId;
 
-  final NoticeDetailArgs _args;
+  final int _meetingId;
+  final int _noticeId;
 
   /// 이 화면에서 읽음 처리를 이미 요청했는지. 다시 불러와도 한 번만 보냅니다.
   bool _readRequested = false;
@@ -23,10 +23,7 @@ class NoticeDetailViewModel extends AsyncNotifier<Notice> {
   @override
   Future<Notice> build() async {
     final notice = await ref.watch(getNoticeDetailProvider)(
-      GetNoticeDetailParams(
-        meetingId: _args.meetingId,
-        noticeId: _args.noticeId,
-      ),
+      GetNoticeDetailParams(meetingId: _meetingId, noticeId: _noticeId),
     );
     // 상세를 보여준 뒤 읽음으로 기록합니다. 응답은 기다리지 않습니다. (3-6)
     unawaited(_markRead());
@@ -40,10 +37,7 @@ class NoticeDetailViewModel extends AsyncNotifier<Notice> {
     _readRequested = true;
     try {
       await ref.read(markNoticeReadProvider)(
-        MarkNoticeReadParams(
-          meetingId: _args.meetingId,
-          noticeId: _args.noticeId,
-        ),
+        MarkNoticeReadParams(meetingId: _meetingId, noticeId: _noticeId),
       );
     } on NoticeException {
       // 읽음 기록 실패는 사용자에게 알리지 않습니다.

@@ -3,13 +3,14 @@ import 'dart:async';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:moamoa/features/notice/domain/entities/notice_exception.dart';
+import 'package:moamoa/features/notice/domain/entities/notice_detail_request.dart';
 import 'package:moamoa/features/notice/presentation/providers/notice_providers.dart';
 import 'package:moamoa/features/notice/presentation/viewmodels/notice_detail_view_model.dart';
 
 import '../../fakes/fake_notice_repository.dart';
 
 void main() {
-  const args = (meetingId: 1, noticeId: 1);
+  const request = NoticeDetailRequest(meetingId: 1, noticeId: 1);
 
   group(NoticeDetailViewModel, () {
     late FakeNoticeRepository repository;
@@ -27,18 +28,18 @@ void main() {
         retry: (_, _) => null,
       );
       // 상세 화면이 열려 있는 상태
-      container.listen(noticeDetailProvider(args), (_, _) {});
+      container.listen(noticeDetailProvider(request), (_, _) {});
     });
 
     test('공지 상세를 불러온다', () async {
-      final notice = await container.read(noticeDetailProvider(args).future);
+      final notice = await container.read(noticeDetailProvider(request).future);
 
       expect(notice.title, '10월 회비 안내');
       expect(notice.content, '10일까지 납부');
     });
 
     test('상세를 불러오면 해당 공지의 읽음 처리를 한 번 요청한다', () async {
-      await container.read(noticeDetailProvider(args).future);
+      await container.read(noticeDetailProvider(request).future);
       await Future<void>.delayed(Duration.zero);
 
       expect(repository.readNoticeIds, [1]);
@@ -52,10 +53,10 @@ void main() {
         overrides: [noticeRepositoryProvider.overrideWithValue(failing)],
         retry: (_, _) => null,
       );
-      failingContainer.listen(noticeDetailProvider(args), (_, _) {});
+      failingContainer.listen(noticeDetailProvider(request), (_, _) {});
 
       await expectLater(
-        failingContainer.read(noticeDetailProvider(args).future),
+        failingContainer.read(noticeDetailProvider(request).future),
         throwsA(isA<NoticeException>()),
       );
       await Future<void>.delayed(Duration.zero);
@@ -66,11 +67,11 @@ void main() {
     test('읽음 처리가 실패해도 불러온 상세를 그대로 보여준다', () async {
       repository.readError = const NoticeException('모임 구성원이 아닙니다.');
 
-      final notice = await container.read(noticeDetailProvider(args).future);
+      final notice = await container.read(noticeDetailProvider(request).future);
       await Future<void>.delayed(Duration.zero);
 
       expect(notice.title, '10월 회비 안내');
-      expect(container.read(noticeDetailProvider(args)).hasError, isFalse);
+      expect(container.read(noticeDetailProvider(request)).hasError, isFalse);
     });
 
     test('읽음 처리가 실패해도 처리되지 않은 오류를 남기지 않는다', () async {
@@ -82,8 +83,8 @@ void main() {
           overrides: [noticeRepositoryProvider.overrideWithValue(failing)],
           retry: (_, _) => null,
         );
-        zoned.listen(noticeDetailProvider(args), (_, _) {});
-        await zoned.read(noticeDetailProvider(args).future);
+        zoned.listen(noticeDetailProvider(request), (_, _) {});
+        await zoned.read(noticeDetailProvider(request).future);
         await Future<void>.delayed(Duration.zero);
       }, (error, _) => uncaught.add(error));
 
@@ -91,9 +92,9 @@ void main() {
     });
 
     test('같은 화면에서 상세를 다시 불러와도 읽음 처리는 다시 요청하지 않는다', () async {
-      await container.read(noticeDetailProvider(args).future);
-      container.invalidate(noticeDetailProvider(args));
-      await container.read(noticeDetailProvider(args).future);
+      await container.read(noticeDetailProvider(request).future);
+      container.invalidate(noticeDetailProvider(request));
+      await container.read(noticeDetailProvider(request).future);
       await Future<void>.delayed(Duration.zero);
 
       expect(repository.readNoticeIds, [1]);

@@ -7,6 +7,7 @@ import '../../data/datasources/notice_remote_data_source.dart';
 import '../../data/datasources/notice_remote_data_source_impl.dart';
 import '../../data/repositories/notice_repository_impl.dart';
 import '../../domain/entities/notice.dart';
+import '../../domain/entities/notice_detail_request.dart';
 import '../../domain/repositories/notice_repository.dart';
 import '../../domain/usecases/create_notice.dart';
 import '../../domain/usecases/delete_notice.dart';
@@ -81,13 +82,19 @@ final noticeListProvider = AsyncNotifierProvider.autoDispose
     );
 
 final noticeDetailProvider = AsyncNotifierProvider.autoDispose
-    .family<NoticeDetailViewModel, Notice, NoticeDetailArgs>(
-      (args) => NoticeDetailViewModel(args: args),
+    .family<NoticeDetailViewModel, Notice, NoticeDetailRequest>(
+      (request) => NoticeDetailViewModel(
+        meetingId: request.meetingId,
+        noticeId: request.noticeId,
+      ),
     );
 
 final noticeDeleteProvider = NotifierProvider.autoDispose
-    .family<NoticeDeleteViewModel, NoticeDeleteState, NoticeDetailArgs>(
-      (args) => NoticeDeleteViewModel(args: args),
+    .family<NoticeDeleteViewModel, NoticeDeleteState, NoticeDetailRequest>(
+      (request) => NoticeDeleteViewModel(
+        meetingId: request.meetingId,
+        noticeId: request.noticeId,
+      ),
     );
 
 final noticeWriteProvider = AsyncNotifierProvider.autoDispose
