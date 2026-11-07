@@ -12,6 +12,7 @@ import '../../domain/repositories/notice_repository.dart';
 import '../../domain/usecases/create_notice.dart';
 import '../../domain/usecases/delete_notice.dart';
 import '../../domain/usecases/get_notice_detail.dart';
+import '../../domain/usecases/get_notice_reads.dart';
 import '../../domain/usecases/get_notices.dart';
 import '../../domain/usecases/mark_notice_read.dart';
 import '../../domain/usecases/update_notice.dart';
@@ -66,6 +67,11 @@ final deleteNoticeProvider = Provider<DeleteNotice>(
 final markNoticeReadProvider = Provider<MarkNoticeRead>(
   (ref) =>
       MarkNoticeReadImpl(noticeRepository: ref.watch(noticeRepositoryProvider)),
+);
+
+final getNoticeReadsProvider = Provider<GetNoticeReads>(
+  (ref) =>
+      GetNoticeReadsImpl(noticeRepository: ref.watch(noticeRepositoryProvider)),
 );
 
 // ViewModel / 화면 상태 (family 인자: meetingId)
