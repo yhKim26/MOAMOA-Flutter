@@ -10,6 +10,7 @@ import '../auth_error.dart';
 import '../providers/auth_providers.dart';
 import '../viewmodels/reset_password_state.dart';
 import '../viewmodels/reset_password_status.dart';
+import '../widgets/auth_page_title.dart';
 import '../widgets/auth_submit_bar.dart';
 import '../widgets/auth_text_field.dart';
 
@@ -78,16 +79,24 @@ class _ResetPasswordPageState extends ConsumerState<ResetPasswordPage> {
     }
   }
 
+  /// 링크를 쓸 수 없으면 안내 문구, 쓸 수 있으면 null 입니다.
+  String? _linkErrorMessage(ResetPasswordState state) {
+    if (widget.token.isEmpty) return '링크가 올바르지 않아요. 비밀번호 찾기를 다시 요청해 주세요.';
+    if (state.isLinkExpired) return '링크가 만료되었습니다. 다시 요청해 주세요.';
+    return null;
+  }
+
   @override
   Widget build(BuildContext context) {
     ref.listen(passwordResetProvider, (_, next) => _onStateChanged(next));
     final state = ref.watch(passwordResetProvider);
+    final linkErrorMessage = _linkErrorMessage(state);
 
-    if (widget.token.isEmpty) {
+    if (linkErrorMessage != null) {
       return Scaffold(
         backgroundColor: MoaColors.page,
         body: MoaErrorWidget(
-          message: '링크가 올바르지 않아요. 비밀번호 찾기를 다시 요청해 주세요.',
+          message: linkErrorMessage,
           actionLabel: '비밀번호 찾기',
           onAction: _goToForgotPassword,
         ),
@@ -95,16 +104,6 @@ class _ResetPasswordPageState extends ConsumerState<ResetPasswordPage> {
     }
     if (state.status == ResetPasswordStatus.success) {
       return _ResetDoneView(onLoginPressed: _goToLogin);
-    }
-    if (state.isLinkExpired) {
-      return Scaffold(
-        backgroundColor: MoaColors.page,
-        body: MoaErrorWidget(
-          message: '링크가 만료되었습니다. 다시 요청해 주세요.',
-          actionLabel: '비밀번호 찾기',
-          onAction: _goToForgotPassword,
-        ),
-      );
     }
 
     return Scaffold(
@@ -114,31 +113,18 @@ class _ResetPasswordPageState extends ConsumerState<ResetPasswordPage> {
           // 뒤로 버튼이 없어도 다른 화면과 제목 높이를 맞춥니다. (Top Bar 56 + 4)
           padding: const EdgeInsets.fromLTRB(20, 60, 20, 24),
           children: [
-            // 제목과 안내
-            Text('새 비밀번호를 정해요', style: MoaText.titleXl),
-            const SizedBox(height: 6),
-            Text(
-              '비밀번호를 바꾸면 모든 기기에서 로그아웃돼요.',
-              style: MoaText.body.copyWith(color: MoaColors.textSecondary),
+            const AuthPageTitle(
+              title: '새 비밀번호를 정해요',
+              description: '비밀번호를 바꾸면 모든 기기에서 로그아웃돼요.',
             ),
             const SizedBox(height: 24),
-            AuthTextField(
-              label: '새 비밀번호',
-              controller: _passwordController,
-              obscureText: true,
-              hintText: '영문과 숫자를 포함해 8~72자',
-              errorText: _passwordError,
+            _NewPasswordFields(
+              passwordController: _passwordController,
+              confirmController: _confirmController,
+              passwordError: _passwordError,
+              confirmError: _confirmError,
               onChanged: _onChanged,
-            ),
-            const SizedBox(height: 16),
-            AuthTextField(
-              label: '비밀번호 확인',
-              controller: _confirmController,
-              obscureText: true,
-              hintText: '비밀번호를 한 번 더 입력하세요',
-              errorText: _confirmError,
-              onChanged: _onChanged,
-              onSubmitted: (_) => _submit(),
+              onSubmitted: _submit,
             ),
           ],
         ),
@@ -148,6 +134,53 @@ class _ResetPasswordPageState extends ConsumerState<ResetPasswordPage> {
         isLoading: state.isSubmitting,
         onPressed: _submit,
       ),
+    );
+  }
+}
+
+/// 새 비밀번호와 비밀번호 확인 입력칸
+class _NewPasswordFields extends StatelessWidget {
+  const _NewPasswordFields({
+    required this.passwordController,
+    required this.confirmController,
+    required this.passwordError,
+    required this.confirmError,
+    required this.onChanged,
+    required this.onSubmitted,
+  });
+
+  final TextEditingController passwordController;
+  final TextEditingController confirmController;
+  final String? passwordError;
+  final String? confirmError;
+  final ValueChanged<String> onChanged;
+
+  /// 비밀번호 확인 칸에서 키보드의 완료를 눌렀을 때
+  final VoidCallback onSubmitted;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        AuthTextField(
+          label: '새 비밀번호',
+          controller: passwordController,
+          obscureText: true,
+          hintText: '영문과 숫자를 포함해 8~72자',
+          errorText: passwordError,
+          onChanged: onChanged,
+        ),
+        const SizedBox(height: 16),
+        AuthTextField(
+          label: '비밀번호 확인',
+          controller: confirmController,
+          obscureText: true,
+          hintText: '비밀번호를 한 번 더 입력하세요',
+          errorText: confirmError,
+          onChanged: onChanged,
+          onSubmitted: (_) => onSubmitted(),
+        ),
+      ],
     );
   }
 }
@@ -162,19 +195,12 @@ class _ResetDoneView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: MoaColors.page,
-      body: SafeArea(
+      body: const SafeArea(
         child: Padding(
-          padding: const EdgeInsets.fromLTRB(20, 60, 20, 24),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text('비밀번호를 바꿨어요', style: MoaText.titleXl),
-              const SizedBox(height: 6),
-              Text(
-                '비밀번호가 변경되었습니다. 새 비밀번호로 다시 로그인해 주세요.',
-                style: MoaText.body.copyWith(color: MoaColors.textSecondary),
-              ),
-            ],
+          padding: EdgeInsets.fromLTRB(20, 60, 20, 24),
+          child: AuthPageTitle(
+            title: '비밀번호를 바꿨어요',
+            description: '비밀번호가 변경되었습니다. 새 비밀번호로 다시 로그인해 주세요.',
           ),
         ),
       ),

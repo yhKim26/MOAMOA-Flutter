@@ -10,6 +10,7 @@ import '../auth_error.dart';
 import '../providers/auth_providers.dart';
 import '../viewmodels/forgot_password_state.dart';
 import '../viewmodels/forgot_password_status.dart';
+import '../widgets/auth_page_title.dart';
 import '../widgets/auth_submit_bar.dart';
 import '../widgets/auth_text_field.dart';
 
@@ -74,12 +75,9 @@ class _ForgotPasswordPageState extends ConsumerState<ForgotPasswordPage> {
       body: ListView(
         padding: const EdgeInsets.fromLTRB(20, 4, 20, 24),
         children: [
-          // 제목과 안내
-          Text('비밀번호를 잊으셨나요?', style: MoaText.titleXl),
-          const SizedBox(height: 6),
-          Text(
-            '가입한 이메일로 재설정 링크를 보내 드릴게요.',
-            style: MoaText.body.copyWith(color: MoaColors.textSecondary),
+          const AuthPageTitle(
+            title: '비밀번호를 잊으셨나요?',
+            description: '가입한 이메일로 재설정 링크를 보내 드릴게요.',
           ),
           const SizedBox(height: 24),
           AuthTextField(
@@ -92,41 +90,48 @@ class _ForgotPasswordPageState extends ConsumerState<ForgotPasswordPage> {
             onSubmitted: (_) => _submit(),
           ),
           const SizedBox(height: 20),
-          // 메일 안내 카드. 링크 유효 시간은 명세(10분)를 따릅니다.
-          DecoratedBox(
-            decoration: BoxDecoration(
-              color: MoaColors.fill,
-              borderRadius: BorderRadius.circular(24),
-            ),
-            child: Padding(
-              padding: const EdgeInsets.all(16),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  SvgPicture.asset(
-                    'assets/icons/envelope_simple.svg',
-                    width: 20,
-                    height: 20,
-                  ),
-                  const SizedBox(width: 12),
-                  Expanded(
-                    child: Text(
-                      '메일이 오지 않으면 스팸함을 확인해 주세요. 링크는 10분 동안만 쓸 수 있어요.',
-                      style: MoaText.sub.copyWith(
-                        color: MoaColors.textSecondary,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
+          const _MailNoticeCard(),
         ],
       ),
       bottomNavigationBar: AuthSubmitBar(
         label: '재설정 링크 보내기',
         isLoading: isSending,
         onPressed: _submit,
+      ),
+    );
+  }
+}
+
+/// 메일 안내 카드. 링크 유효 시간은 명세(10분)를 따릅니다.
+class _MailNoticeCard extends StatelessWidget {
+  const _MailNoticeCard();
+
+  @override
+  Widget build(BuildContext context) {
+    return DecoratedBox(
+      decoration: BoxDecoration(
+        color: MoaColors.fill,
+        borderRadius: BorderRadius.circular(24),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            SvgPicture.asset(
+              'assets/icons/envelope_simple.svg',
+              width: 20,
+              height: 20,
+            ),
+            const SizedBox(width: 12),
+            Expanded(
+              child: Text(
+                '메일이 오지 않으면 스팸함을 확인해 주세요. 링크는 10분 동안만 쓸 수 있어요.',
+                style: MoaText.sub.copyWith(color: MoaColors.textSecondary),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
