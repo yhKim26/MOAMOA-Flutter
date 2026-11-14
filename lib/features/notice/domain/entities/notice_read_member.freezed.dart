@@ -16,7 +16,7 @@ T _$identity<T>(T value) => value;
 mixin _$NoticeReadMember {
 
  int get memberId;/// 회원 기능이 생기기 전까지 null 일 수 있습니다.
- String? get userName;/// 처음 읽은 시각. 읽지 않은 구성원은 null 입니다.
+ String? get userName; ProfileColor get profileColor;/// 처음 읽은 시각. 읽지 않은 구성원은 null 입니다.
  DateTime? get readAt;
 /// Create a copy of NoticeReadMember
 /// with the given fields replaced by the non-null parameter values.
@@ -28,16 +28,16 @@ $NoticeReadMemberCopyWith<NoticeReadMember> get copyWith => _$NoticeReadMemberCo
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is NoticeReadMember&&(identical(other.memberId, memberId) || other.memberId == memberId)&&(identical(other.userName, userName) || other.userName == userName)&&(identical(other.readAt, readAt) || other.readAt == readAt));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is NoticeReadMember&&(identical(other.memberId, memberId) || other.memberId == memberId)&&(identical(other.userName, userName) || other.userName == userName)&&(identical(other.profileColor, profileColor) || other.profileColor == profileColor)&&(identical(other.readAt, readAt) || other.readAt == readAt));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,memberId,userName,readAt);
+int get hashCode => Object.hash(runtimeType,memberId,userName,profileColor,readAt);
 
 @override
 String toString() {
-  return 'NoticeReadMember(memberId: $memberId, userName: $userName, readAt: $readAt)';
+  return 'NoticeReadMember(memberId: $memberId, userName: $userName, profileColor: $profileColor, readAt: $readAt)';
 }
 
 
@@ -48,7 +48,7 @@ abstract mixin class $NoticeReadMemberCopyWith<$Res>  {
   factory $NoticeReadMemberCopyWith(NoticeReadMember value, $Res Function(NoticeReadMember) _then) = _$NoticeReadMemberCopyWithImpl;
 @useResult
 $Res call({
- int memberId, String? userName, DateTime? readAt
+ int memberId, String? userName, ProfileColor profileColor, DateTime? readAt
 });
 
 
@@ -65,11 +65,12 @@ class _$NoticeReadMemberCopyWithImpl<$Res>
 
 /// Create a copy of NoticeReadMember
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? memberId = null,Object? userName = freezed,Object? readAt = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? memberId = null,Object? userName = freezed,Object? profileColor = null,Object? readAt = freezed,}) {
   return _then(NoticeReadMember(
 memberId: null == memberId ? _self.memberId : memberId // ignore: cast_nullable_to_non_nullable
 as int,userName: freezed == userName ? _self.userName : userName // ignore: cast_nullable_to_non_nullable
-as String?,readAt: freezed == readAt ? _self.readAt : readAt // ignore: cast_nullable_to_non_nullable
+as String?,profileColor: null == profileColor ? _self.profileColor : profileColor // ignore: cast_nullable_to_non_nullable
+as ProfileColor,readAt: freezed == readAt ? _self.readAt : readAt // ignore: cast_nullable_to_non_nullable
 as DateTime?,
   ));
 }
@@ -155,10 +156,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( int memberId,  String? userName,  DateTime? readAt)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( int memberId,  String? userName,  ProfileColor profileColor,  DateTime? readAt)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _NoticeReadMember() when $default != null:
-return $default(_that.memberId,_that.userName,_that.readAt);case _:
+return $default(_that.memberId,_that.userName,_that.profileColor,_that.readAt);case _:
   return orElse();
 
 }
@@ -176,10 +177,10 @@ return $default(_that.memberId,_that.userName,_that.readAt);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( int memberId,  String? userName,  DateTime? readAt)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( int memberId,  String? userName,  ProfileColor profileColor,  DateTime? readAt)  $default,) {final _that = this;
 switch (_that) {
 case _NoticeReadMember():
-return $default(_that.memberId,_that.userName,_that.readAt);case _:
+return $default(_that.memberId,_that.userName,_that.profileColor,_that.readAt);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -196,10 +197,10 @@ return $default(_that.memberId,_that.userName,_that.readAt);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( int memberId,  String? userName,  DateTime? readAt)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( int memberId,  String? userName,  ProfileColor profileColor,  DateTime? readAt)?  $default,) {final _that = this;
 switch (_that) {
 case _NoticeReadMember() when $default != null:
-return $default(_that.memberId,_that.userName,_that.readAt);case _:
+return $default(_that.memberId,_that.userName,_that.profileColor,_that.readAt);case _:
   return null;
 
 }
@@ -211,12 +212,13 @@ return $default(_that.memberId,_that.userName,_that.readAt);case _:
 
 
 class _NoticeReadMember implements NoticeReadMember {
-  const _NoticeReadMember({required this.memberId, this.userName, this.readAt});
+  const _NoticeReadMember({required this.memberId, this.userName, this.profileColor = ProfileColor.lightBlue, this.readAt});
   
 
 @override final  int memberId;
 /// 회원 기능이 생기기 전까지 null 일 수 있습니다.
 @override final  String? userName;
+@override@JsonKey() final  ProfileColor profileColor;
 /// 처음 읽은 시각. 읽지 않은 구성원은 null 입니다.
 @override final  DateTime? readAt;
 
@@ -230,16 +232,16 @@ _$NoticeReadMemberCopyWith<_NoticeReadMember> get copyWith => __$NoticeReadMembe
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _NoticeReadMember&&(identical(other.memberId, memberId) || other.memberId == memberId)&&(identical(other.userName, userName) || other.userName == userName)&&(identical(other.readAt, readAt) || other.readAt == readAt));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _NoticeReadMember&&(identical(other.memberId, memberId) || other.memberId == memberId)&&(identical(other.userName, userName) || other.userName == userName)&&(identical(other.profileColor, profileColor) || other.profileColor == profileColor)&&(identical(other.readAt, readAt) || other.readAt == readAt));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,memberId,userName,readAt);
+int get hashCode => Object.hash(runtimeType,memberId,userName,profileColor,readAt);
 
 @override
 String toString() {
-  return 'NoticeReadMember(memberId: $memberId, userName: $userName, readAt: $readAt)';
+  return 'NoticeReadMember(memberId: $memberId, userName: $userName, profileColor: $profileColor, readAt: $readAt)';
 }
 
 
@@ -250,7 +252,7 @@ abstract mixin class _$NoticeReadMemberCopyWith<$Res> implements $NoticeReadMemb
   factory _$NoticeReadMemberCopyWith(_NoticeReadMember value, $Res Function(_NoticeReadMember) _then) = __$NoticeReadMemberCopyWithImpl;
 @override @useResult
 $Res call({
- int memberId, String? userName, DateTime? readAt
+ int memberId, String? userName, ProfileColor profileColor, DateTime? readAt
 });
 
 
@@ -267,11 +269,12 @@ class __$NoticeReadMemberCopyWithImpl<$Res>
 
 /// Create a copy of NoticeReadMember
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? memberId = null,Object? userName = freezed,Object? readAt = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? memberId = null,Object? userName = freezed,Object? profileColor = null,Object? readAt = freezed,}) {
   return _then(_NoticeReadMember(
 memberId: null == memberId ? _self.memberId : memberId // ignore: cast_nullable_to_non_nullable
 as int,userName: freezed == userName ? _self.userName : userName // ignore: cast_nullable_to_non_nullable
-as String?,readAt: freezed == readAt ? _self.readAt : readAt // ignore: cast_nullable_to_non_nullable
+as String?,profileColor: null == profileColor ? _self.profileColor : profileColor // ignore: cast_nullable_to_non_nullable
+as ProfileColor,readAt: freezed == readAt ? _self.readAt : readAt // ignore: cast_nullable_to_non_nullable
 as DateTime?,
   ));
 }
