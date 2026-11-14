@@ -28,7 +28,7 @@ void main() {
     ForgotPasswordViewModel viewModel() =>
         container.read(forgotPasswordProvider.notifier);
 
-    test('처음에는 요청 전 단계다', () {
+    test('처음에는 요청 전 단계로 시작한다', () {
       expect(
         container.read(forgotPasswordProvider).status,
         ForgotPasswordStatus.initial,
