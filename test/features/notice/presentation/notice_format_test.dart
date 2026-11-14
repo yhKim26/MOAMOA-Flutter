@@ -150,11 +150,11 @@ void main() {
       expect(notice(readCount: 8, totalCount: 8).isReadByAll, isTrue);
     });
 
-    test('읽은 수가 전체 수보다 적으면 모두 읽은 것이 아니다', () {
+    test('읽은 수가 전체 수보다 적으면 모두 읽지 않은 것으로 본다', () {
       expect(notice(readCount: 6, totalCount: 8).isReadByAll, isFalse);
     });
 
-    test('읽은 수를 받지 못했으면 모두 읽은 것이 아니다', () {
+    test('읽은 수를 받지 못했으면 모두 읽지 않은 것으로 본다', () {
       expect(notice().isReadByAll, isFalse);
     });
   });
