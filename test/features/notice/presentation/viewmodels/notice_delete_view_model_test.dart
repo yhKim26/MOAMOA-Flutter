@@ -34,11 +34,11 @@ void main() {
     NoticeDeleteStatus status() =>
         container.read(noticeDeleteProvider(request)).status;
 
-    test('처음에는 삭제를 요청하지 않은 상태다', () {
+    test('처음에는 삭제를 요청하지 않은 상태로 시작한다', () {
       expect(status(), NoticeDeleteStatus.initial);
     });
 
-    test('삭제 요청 중에는 삭제 중 상태다', () async {
+    test('삭제를 요청하면 응답 전까지 삭제 중 상태가 된다', () async {
       final gate = Completer<void>();
       repository.deleteGate = gate;
 
