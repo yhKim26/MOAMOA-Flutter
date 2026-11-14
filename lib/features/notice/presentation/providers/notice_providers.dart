@@ -8,6 +8,7 @@ import '../../data/datasources/notice_remote_data_source_impl.dart';
 import '../../data/repositories/notice_repository_impl.dart';
 import '../../domain/entities/notice.dart';
 import '../../domain/entities/notice_detail_request.dart';
+import '../../domain/entities/notice_reads.dart';
 import '../../domain/repositories/notice_repository.dart';
 import '../../domain/usecases/create_notice.dart';
 import '../../domain/usecases/delete_notice.dart';
@@ -104,6 +105,21 @@ final noticeReadProvider = FutureProvider.autoDispose
         // 읽음 기록 실패는 사용자에게 알리지 않습니다. 여기서 잡지 않으면 Provider 가 오류 상태로 남아
         // 자동으로 다시 시도하므로, 공지 예외뿐 아니라 모든 Exception 을 잡습니다.
       }
+    });
+
+/// 공지 읽음 현황 (3-7, family 인자: 공지 상세와 같은 [NoticeDetailRequest])
+///
+/// 상세 화면의 "읽은 구성원" 이 구독합니다. 내 읽음 기록([noticeReadProvider])이 끝난 뒤 불러와
+/// 방금 읽은 나도 읽은 구성원에 들어갑니다. 실패하면 오류 상태가 되고, 화면에서 다시 시도합니다.
+final noticeReadsProvider = FutureProvider.autoDispose
+    .family<NoticeReads, NoticeDetailRequest>((ref, request) async {
+      await ref.watch(noticeReadProvider(request).future);
+      return ref.watch(getNoticeReadsProvider)(
+        GetNoticeReadsParams(
+          meetingId: request.meetingId,
+          noticeId: request.noticeId,
+        ),
+      );
     });
 
 final noticeDeleteProvider = NotifierProvider.autoDispose

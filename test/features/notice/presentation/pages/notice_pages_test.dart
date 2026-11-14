@@ -12,11 +12,14 @@ import 'package:moamoa/features/notice/domain/entities/notice.dart';
 import 'package:moamoa/features/notice/domain/entities/notice_author.dart';
 import 'package:moamoa/features/notice/domain/entities/notice_detail_request.dart';
 import 'package:moamoa/features/notice/domain/entities/notice_exception.dart';
+import 'package:moamoa/features/notice/domain/entities/notice_read_member.dart';
+import 'package:moamoa/features/notice/domain/entities/notice_reads.dart';
 import 'package:moamoa/features/notice/presentation/notice_routes.dart';
 import 'package:moamoa/features/notice/presentation/pages/notice_detail_page.dart';
 import 'package:moamoa/features/notice/presentation/pages/notice_list_page.dart';
 import 'package:moamoa/features/notice/presentation/pages/notice_write_page.dart';
 import 'package:moamoa/features/notice/presentation/providers/notice_providers.dart';
+import 'package:moamoa/features/notice/presentation/widgets/notice_reads_view.dart';
 
 import '../../fakes/fake_group_my_role.dart';
 import '../../fakes/fake_notice_repository.dart';
@@ -938,6 +941,77 @@ void main() {
 
       expect(find.byType(MoaProfileAvatar), findsNothing);
       expect(find.text('2026년 9월 12일'), findsOneWidget);
+    });
+
+    group(NoticeReadsView, () {
+      NoticeReadMember reader(int id) =>
+          NoticeReadMember(memberId: id, userName: '구성원$id');
+
+      Finder avatarsInReads() => find.descendant(
+        of: find.byType(NoticeReadsView),
+        matching: find.byType(MoaProfileAvatar),
+      );
+
+      testWidgets('읽은 수와 읽은 구성원 동그라미, 안 읽은 구성원을 보여준다', (tester) async {
+        final repository = FakeNoticeRepository(notices: [buildNotice(1)])
+          ..readsByNoticeId[1] = NoticeReads(
+            readCount: 2,
+            totalCount: 4,
+            readMembers: [reader(3), reader(5)],
+            unreadMembers: const [
+              NoticeReadMember(memberId: 7, userName: '박지훈'),
+              NoticeReadMember(memberId: 8, userName: '최민아'),
+            ],
+          );
+        await pumpPage(tester, repository, page);
+        await tester.pumpAndSettle();
+
+        expect(find.text('읽은 구성원'), findsOneWidget);
+        expect(find.text('2/4'), findsOneWidget);
+        expect(avatarsInReads(), findsNWidgets(2));
+        expect(find.text('박지훈, 최민아 님이 아직 안 읽었어요.'), findsOneWidget);
+      });
+
+      testWidgets('읽은 구성원이 7명이면 동그라미 6개와 +1 을 보여준다', (tester) async {
+        final repository = FakeNoticeRepository(notices: [buildNotice(1)])
+          ..readsByNoticeId[1] = NoticeReads(
+            readCount: 7,
+            totalCount: 7,
+            readMembers: [for (var id = 1; id <= 7; id++) reader(id)],
+            unreadMembers: const [],
+          );
+        await pumpPage(tester, repository, page);
+        await tester.pumpAndSettle();
+
+        expect(avatarsInReads(), findsNWidgets(6));
+        expect(find.text('+1'), findsOneWidget);
+        expect(find.text('모두 읽었어요.'), findsOneWidget);
+      });
+
+      testWidgets('읽음 현황을 불러오지 못해도 공지 내용은 그대로 보여준다', (tester) async {
+        final repository = FakeNoticeRepository(
+          notices: [buildNotice(1, title: '10월 회비 안내')],
+        )..readsError = Exception('시간 초과');
+        await pumpPage(tester, repository, page);
+        await tester.pumpAndSettle();
+
+        expect(find.text('10월 회비 안내'), findsOneWidget);
+        expect(find.text('읽음 현황을 불러오지 못했어요.'), findsOneWidget);
+      });
+
+      testWidgets('읽음 현황을 불러오지 못한 뒤 다시 시도를 누르면 다시 불러와 보여준다', (tester) async {
+        final repository = FakeNoticeRepository(notices: [buildNotice(1)])
+          ..readsError = Exception('시간 초과');
+        await pumpPage(tester, repository, page);
+        await tester.pumpAndSettle();
+
+        repository.readsError = null;
+        await tester.tap(find.text('다시 시도'));
+        await tester.pumpAndSettle();
+
+        expect(find.text('읽음 현황을 불러오지 못했어요.'), findsNothing);
+        expect(find.text('0/0'), findsOneWidget);
+      });
     });
 
     testWidgets('수정 후 상세를 다시 불러오는 동안에도 이전 내용을 그대로 보여준다', (tester) async {
