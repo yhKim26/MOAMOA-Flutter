@@ -14,6 +14,7 @@ import '../providers/notice_providers.dart';
 import '../viewmodels/notice_delete_state.dart';
 import '../viewmodels/notice_delete_status.dart';
 import '../widgets/notice_colors.dart';
+import '../widgets/notice_reads_view.dart';
 import '../widgets/notice_role_retry_button.dart';
 
 /// 공지 상세 화면
@@ -99,7 +100,7 @@ class NoticeDetailPage extends ConsumerWidget {
           isDeleting: isDeleting,
         ),
         body: notice.when(
-          data: (notice) => _NoticeContent(notice: notice),
+          data: (notice) => _NoticeContent(notice: notice, request: _request),
           loading: () => const Center(child: CircularProgressIndicator()),
           // 삭제되었거나 없는 공지는 안내하고 목록으로 보냅니다. (예외처리 4-6)
           error: (error, _) => isNoticeNotFound(error)
@@ -227,11 +228,14 @@ class _CircleIconButton extends StatelessWidget {
   }
 }
 
-/// 제목 · 작성자 · 작성일 · 본문
+/// 제목 · 작성자 · 작성일 · 본문 · 읽은 구성원
 class _NoticeContent extends StatelessWidget {
-  const _NoticeContent({required this.notice});
+  const _NoticeContent({required this.notice, required this.request});
 
   final Notice notice;
+
+  /// 읽은 구성원을 불러올 공지
+  final NoticeDetailRequest request;
 
   static const _bodyStyle = TextStyle(
     fontSize: 15,
@@ -293,6 +297,8 @@ class _NoticeContent extends StatelessWidget {
             Text(paragraph, style: _bodyStyle),
             const SizedBox(height: 14),
           ],
+          const SizedBox(height: 14),
+          NoticeReadsView(request: request),
         ],
       ),
     );
