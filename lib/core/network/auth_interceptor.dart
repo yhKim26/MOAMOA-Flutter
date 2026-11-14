@@ -5,12 +5,15 @@ import '../storage/token_storage.dart';
 
 /// 인증이 필요 없는 요청(로그인·회원가입·토큰 재발급·비밀번호 찾기)에 붙이는 표시
 ///
-/// `Options(extra: noAuthExtra)` 로 보내면 토큰을 붙이지 않고, 401 이어도 재발급하지 않습니다.
+/// `Options(extra: noAuthExtra)` 로 보내면 토큰을 붙이지 않고, 401·403 이어도 재발급하지 않습니다.
 const noAuthExtra = {AuthInterceptor.requiresAuthKey: false};
 
-/// 요청에 액세스 토큰을 붙이고, 401 이면 토큰을 재발급해 다시 보냅니다. (API 공통 사항 "인증", 7-3)
+/// 요청에 액세스 토큰을 붙이고, 토큰이 유효하지 않으면 재발급해 다시 보냅니다. (API 공통 사항 "인증", 7-3)
 ///
-/// [QueuedInterceptor] 라서 여러 요청이 동시에 401 이어도 하나씩 처리합니다.
+/// 유효하지 않은 토큰은 403(멘토 리뷰 기준)과 401(현재 API 명세)을 모두 받아 처리합니다.
+/// 권한이 없는 403 이면 재발급 뒤 다시 보내도 403 이 그대로 넘어갑니다.
+///
+/// [QueuedInterceptor] 라서 여러 요청이 동시에 401·403 이어도 하나씩 처리합니다.
 /// 먼저 처리한 요청이 재발급하면, 뒤의 요청은 바뀐 토큰으로 다시 보내기만 합니다.
 /// 요청을 보낸 뒤 로그아웃하거나 다른 계정으로 로그인해 토큰이 바뀌었으면 다시 보내지 않습니다.
 class AuthInterceptor extends QueuedInterceptor {
@@ -59,7 +62,7 @@ class AuthInterceptor extends QueuedInterceptor {
     ErrorInterceptorHandler handler,
   ) async {
     final options = err.requestOptions;
-    if (err.response?.statusCode != 401 || !_requiresAuth(options)) {
+    if (!_isInvalidToken(err) || !_requiresAuth(options)) {
       return handler.next(err);
     }
     // 어떤 예외가 나도 handler 를 부릅니다. 부르지 않으면 뒤의 요청까지 모두 멈춥니다.
@@ -83,7 +86,7 @@ class AuthInterceptor extends QueuedInterceptor {
     } on DioException catch (retryError) {
       handler.next(retryError);
     } on Exception {
-      // 토큰 저장소 오류 등은 원래 401 오류로 넘깁니다.
+      // 토큰 저장소 오류 등은 원래 오류(401·403)로 넘깁니다.
       handler.next(err);
     }
   }
@@ -140,6 +143,12 @@ class AuthInterceptor extends QueuedInterceptor {
         sentAuthorization == _bearer(replacedAccessToken) &&
         stored == _issuedTokens;
   }
+
+  /// 토큰이 유효하지 않다는 응답인지 (403 · 401)
+  bool _isInvalidToken(DioException err) => switch (err.response?.statusCode) {
+    401 || 403 => true,
+    _ => false,
+  };
 
   bool _requiresAuth(RequestOptions options) =>
       options.extra[requiresAuthKey] != false;

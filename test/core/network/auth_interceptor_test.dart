@@ -12,10 +12,13 @@ import 'package:moamoa/core/storage/token_storage_impl.dart';
 
 /// 서버 대신 응답하는 Dio 어댑터
 ///
-/// `Bearer new-access` 또는 [validAccessToken] 이면 200, 아니면 401 을 돌려줍니다.
+/// `Bearer new-access` 또는 [validAccessToken] 이면 200, 아니면 [invalidTokenStatus] 를 돌려줍니다.
 /// `/v1/auth/refresh` 는 [refreshStatus] 로 응답합니다.
 class _FakeServer implements HttpClientAdapter {
   String validAccessToken = 'access';
+
+  /// 유효하지 않은 토큰에 돌려줄 상태 코드 (명세 401, 멘토 리뷰 기준 403)
+  int invalidTokenStatus = 401;
   int refreshStatus = 200;
   int refreshCount = 0;
 
@@ -67,7 +70,7 @@ class _FakeServer implements HttpClientAdapter {
     final auth = options.headers['Authorization'];
     if (auth == 'Bearer new-access') return _json(retryStatus, {'data': {}});
     if (auth == 'Bearer $validAccessToken') return _json(200, {'data': {}});
-    return _json(401, _error);
+    return _json(invalidTokenStatus, _error);
   }
 
   static const _error = {
@@ -183,8 +186,8 @@ void main() {
       expect(server.refreshCount, 0);
     });
 
-    test('401 이 아닌 오류(403)는 재발급하지 않는다', () async {
-      server.fixedStatus = 403;
+    test('401·403 이 아닌 오류(500)는 재발급하지 않는다', () async {
+      server.fixedStatus = 500;
 
       await expectLater(
         dio.get<dynamic>('/v1/meetings/1'),
@@ -192,6 +195,48 @@ void main() {
       );
 
       expect(server.refreshCount, 0);
+    });
+
+    test('유효하지 않은 토큰이 403 이면 토큰을 재발급해 원래 요청을 다시 보내 성공한다', () async {
+      server
+        ..validAccessToken = 'expired-on-server'
+        ..invalidTokenStatus = 403;
+
+      final response = await dio.get<dynamic>('/v1/me');
+
+      expect(response.statusCode, 200);
+      expect(server.refreshCount, 1);
+    });
+
+    test('유효하지 않은 토큰이 403 이고 재발급도 401 이면 다시 로그인해야 한다고 알린다', () async {
+      server
+        ..validAccessToken = 'expired-on-server'
+        ..invalidTokenStatus = 403
+        ..refreshStatus = 401;
+
+      await expectLater(
+        dio.get<dynamic>('/v1/me'),
+        throwsA(isA<DioException>()),
+      );
+
+      expect(expiredCount, 1);
+    });
+
+    test('권한이 없어 403 이면 재발급 뒤 다시 보내도 403 오류를 그대로 넘긴다', () async {
+      server.fixedStatus = 403;
+
+      await expectLater(
+        dio.get<dynamic>('/v1/meetings/1'),
+        throwsA(
+          isA<DioException>().having(
+            (e) => e.response?.statusCode,
+            'statusCode',
+            403,
+          ),
+        ),
+      );
+
+      expect(expiredCount, 0);
     });
 
     test('401 이면 토큰을 재발급해 원래 요청을 다시 보내 성공한다', () async {

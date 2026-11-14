@@ -8,22 +8,52 @@ void main() {
 
     setUp(() => container = ProviderContainer.test());
 
-    test('처음에는 로그인 필요 상태가 아니다', () {
-      expect(container.read(authSessionProvider), AuthSessionStatus.active);
+    AuthSession session() => container.read(authSessionProvider.notifier);
+
+    test('처음에는 로그인하지 않은 상태로 시작한다', () {
+      expect(
+        container.read(authSessionProvider),
+        AuthSessionStatus.unauthorized,
+      );
     });
 
-    test('expire 하면 다시 로그인해야 하는 상태가 된다', () {
-      container.read(authSessionProvider.notifier).expire();
+    test('authenticate 하면 로그인한 상태가 된다', () {
+      session().authenticate();
+
+      expect(
+        container.read(authSessionProvider),
+        AuthSessionStatus.authenticated,
+      );
+    });
+
+    test('로그인한 뒤 expire 하면 다시 로그인해야 하는 상태가 된다', () {
+      session()
+        ..authenticate()
+        ..expire();
 
       expect(container.read(authSessionProvider), AuthSessionStatus.expired);
     });
 
-    test('다시 로그인해 restore 하면 로그인 필요 상태가 풀린다', () {
-      final session = container.read(authSessionProvider.notifier)..expire();
+    test('만료된 뒤 다시 authenticate 하면 로그인한 상태가 된다', () {
+      session()
+        ..expire()
+        ..authenticate();
 
-      session.restore();
+      expect(
+        container.read(authSessionProvider),
+        AuthSessionStatus.authenticated,
+      );
+    });
 
-      expect(container.read(authSessionProvider), AuthSessionStatus.active);
+    test('로그인한 뒤 signOut 하면 로그인하지 않은 상태가 된다', () {
+      session()
+        ..authenticate()
+        ..signOut();
+
+      expect(
+        container.read(authSessionProvider),
+        AuthSessionStatus.unauthorized,
+      );
     });
   });
 }
