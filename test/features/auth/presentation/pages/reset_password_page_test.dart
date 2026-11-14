@@ -156,7 +156,11 @@ void main() {
       await tester.pumpAndSettle();
 
       expect(find.text('네트워크 연결을 확인해주세요.'), findsOneWidget);
-      expect(find.text('비밀번호 변경하기'), findsOneWidget);
+      final fields = tester.widgetList<TextField>(find.byType(TextField));
+      expect(fields.map((field) => field.controller!.text), [
+        'moamoa123',
+        'moamoa123',
+      ]);
     });
 
     testWidgets('주소에 token 이 없으면 링크가 올바르지 않다고 안내한다', (tester) async {
