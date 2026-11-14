@@ -3,8 +3,10 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:go_router/go_router.dart';
 import 'package:moamoa/core/errors/api_error_code.dart';
 import 'package:moamoa/core/errors/api_exception.dart';
+import 'package:moamoa/features/auth/presentation/auth_routes.dart';
 import 'package:moamoa/features/auth/presentation/pages/forgot_password_page.dart';
 import 'package:moamoa/features/auth/presentation/providers/auth_providers.dart';
 
@@ -32,6 +34,25 @@ void main() {
     }
 
     setUp(() => repository = FakeAuthRepository());
+
+    testWidgets('웹 주소로 바로 열어 돌아갈 화면이 없으면 뒤로 버튼을 표시하지 않는다', (tester) async {
+      await tester.pumpWidget(
+        ProviderScope(
+          overrides: [authRepositoryProvider.overrideWithValue(repository)],
+          retry: (_, _) => null,
+          child: MaterialApp.router(
+            routerConfig: GoRouter(
+              initialLocation: '/forgot-password',
+              routes: authRoutes,
+            ),
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+
+      expect(find.text('비밀번호를 잊으셨나요?'), findsOneWidget);
+      expect(find.byType(IconButton), findsNothing);
+    });
 
     testWidgets('링크 유효 시간을 명세대로 10분으로 안내한다', (tester) async {
       await pumpPage(tester);

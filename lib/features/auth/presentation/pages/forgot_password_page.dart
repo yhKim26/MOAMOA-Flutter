@@ -64,6 +64,13 @@ class _ForgotPasswordPageState extends ConsumerState<ForgotPasswordPage> {
     }
   }
 
+  /// 돌아갈 화면이 있는지. 웹에서 주소로 바로 열면 없습니다.
+  bool get _canGoBack => Navigator.canPop(context);
+
+  /// 뒤로 버튼이 없으면 다른 화면과 제목 높이를 맞춥니다. (Top Bar 56 + 4)
+  EdgeInsets get _bodyPadding =>
+      EdgeInsets.fromLTRB(20, _canGoBack ? 4 : 60, 20, 24);
+
   @override
   Widget build(BuildContext context) {
     ref.listen(forgotPasswordProvider, (_, next) => _onStateChanged(next));
@@ -71,27 +78,30 @@ class _ForgotPasswordPageState extends ConsumerState<ForgotPasswordPage> {
 
     return Scaffold(
       backgroundColor: MoaColors.page,
-      appBar: MoaAppBar(),
-      body: ListView(
-        padding: const EdgeInsets.fromLTRB(20, 4, 20, 24),
-        children: [
-          const AuthPageTitle(
-            title: '비밀번호를 잊으셨나요?',
-            description: '가입한 이메일로 재설정 링크를 보내 드릴게요.',
-          ),
-          const SizedBox(height: 24),
-          AuthTextField(
-            label: '이메일',
-            controller: _emailController,
-            hintText: 'you@example.com',
-            keyboardType: TextInputType.emailAddress,
-            errorText: _emailError,
-            onChanged: _onEmailChanged,
-            onSubmitted: (_) => _submit(),
-          ),
-          const SizedBox(height: 20),
-          const _MailNoticeCard(),
-        ],
+      // 돌아갈 화면이 없을 때 뒤로 버튼을 누르면 오류가 나므로 두지 않습니다.
+      appBar: _canGoBack ? MoaAppBar() : null,
+      body: SafeArea(
+        child: ListView(
+          padding: _bodyPadding,
+          children: [
+            const AuthPageTitle(
+              title: '비밀번호를 잊으셨나요?',
+              description: '가입한 이메일로 재설정 링크를 보내 드릴게요.',
+            ),
+            const SizedBox(height: 24),
+            AuthTextField(
+              label: '이메일',
+              controller: _emailController,
+              hintText: 'you@example.com',
+              keyboardType: TextInputType.emailAddress,
+              errorText: _emailError,
+              onChanged: _onEmailChanged,
+              onSubmitted: (_) => _submit(),
+            ),
+            const SizedBox(height: 20),
+            const _MailNoticeCard(),
+          ],
+        ),
       ),
       bottomNavigationBar: AuthSubmitBar(
         label: '재설정 링크 보내기',
