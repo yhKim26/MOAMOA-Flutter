@@ -65,7 +65,8 @@ class _ResetPasswordPageState extends ConsumerState<ResetPasswordPage> {
         .submit(token: widget.token, newPassword: _passwordController.text);
   }
 
-  void _goToForgotPassword() => context.go('/forgot-password');
+  /// 비밀번호 찾기 화면의 뒤로 버튼으로 이 안내에 돌아올 수 있게 쌓아서 엽니다.
+  void _goToForgotPassword() => context.push('/forgot-password');
 
   /// 로그인 화면은 로그인 PR 에서 `/login` 으로 추가합니다.
   void _goToLogin() => context.go('/login');

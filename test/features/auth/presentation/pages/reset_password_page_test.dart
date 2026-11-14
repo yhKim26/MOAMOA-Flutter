@@ -134,6 +134,20 @@ void main() {
       expect(find.text('비밀번호를 잊으셨나요?'), findsOneWidget);
     });
 
+    testWidgets('링크가 만료된 뒤 비밀번호 찾기에서 뒤로 가면 만료 안내로 돌아온다', (tester) async {
+      repository.error = const ApiException(code: ApiErrorCode.validation);
+      await openLink(tester, '/reset-password?token=old');
+      await enterAndSubmit(tester, password: 'moamoa123', confirm: 'moamoa123');
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('비밀번호 찾기'));
+      await tester.pumpAndSettle();
+
+      await tester.tap(find.byType(IconButton));
+      await tester.pumpAndSettle();
+
+      expect(find.text('링크가 만료되었습니다. 다시 요청해 주세요.'), findsOneWidget);
+    });
+
     testWidgets('네트워크 오류는 입력한 내용을 두고 스낵바로 안내한다', (tester) async {
       repository.error = const ApiException(code: ApiErrorCode.network);
       await openLink(tester, '/reset-password?token=abc');
