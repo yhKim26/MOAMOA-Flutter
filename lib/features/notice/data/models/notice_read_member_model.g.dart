@@ -11,6 +11,7 @@ _NoticeReadMemberModel _$NoticeReadMemberModelFromJson(
 ) => _NoticeReadMemberModel(
   memberId: (json['memberId'] as num).toInt(),
   userName: json['userName'] as String?,
+  profileColor: json['profileColor'] as String?,
   readAt: json['readAt'] as String?,
 );
 
@@ -19,5 +20,6 @@ Map<String, dynamic> _$NoticeReadMemberModelToJson(
 ) => <String, dynamic>{
   'memberId': instance.memberId,
   'userName': instance.userName,
+  'profileColor': instance.profileColor,
   'readAt': instance.readAt,
 };

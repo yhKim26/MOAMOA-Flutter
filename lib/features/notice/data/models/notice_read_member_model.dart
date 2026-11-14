@@ -1,4 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:moamoa/core/constants/profile_color.dart';
 
 import '../../domain/entities/notice_read_member.dart';
 
@@ -11,6 +12,9 @@ abstract class NoticeReadMemberModel with _$NoticeReadMemberModel {
   const factory NoticeReadMemberModel({
     required int memberId,
     String? userName,
+
+    /// LIGHT_BLUE · GRAY · BLUE · DARK
+    String? profileColor,
 
     /// ISO-8601 (KST). unreadMembers 항목에는 없습니다.
     String? readAt,
@@ -27,6 +31,7 @@ extension NoticeReadMemberModelX on NoticeReadMemberModel {
     return NoticeReadMember(
       memberId: memberId,
       userName: userName,
+      profileColor: ProfileColor.fromServer(profileColor),
       readAt: readAt == null ? null : DateTime.parse(readAt).toLocal(),
     );
   }

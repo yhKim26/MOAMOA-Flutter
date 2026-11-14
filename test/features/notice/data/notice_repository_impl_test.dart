@@ -306,6 +306,40 @@ void main() {
       );
     });
 
+    test('읽음 현황 구성원의 profileColor 를 프로필 색으로 바꾼다', () async {
+      final repository = _repositoryWith(200, _readsBody);
+
+      final reads = await repository.getNoticeReadsByNoticeId(
+        meetingId: 1,
+        noticeId: 30,
+      );
+
+      expect(reads.readMembers.map((member) => member.profileColor), [
+        ProfileColor.lightBlue,
+        ProfileColor.blue,
+      ]);
+      expect(reads.unreadMembers.single.profileColor, ProfileColor.gray);
+    });
+
+    test('읽음 현황 구성원의 profileColor 가 없거나 모르는 값이면 기본 연파랑으로 바꾼다', () async {
+      final repository = _repositoryWith(200, '''
+      {"success": true, "error": null,
+       "data": {"noticeId": 30, "readCount": 1, "totalCount": 2,
+                "readMembers": [{"memberId": 3, "userName": "김모아",
+                                 "readAt": "2026-10-07T10:00:00+09:00"}],
+                "unreadMembers": [{"memberId": 7, "userName": "박모아",
+                                   "profileColor": "PINK"}]}}
+      ''');
+
+      final reads = await repository.getNoticeReadsByNoticeId(
+        meetingId: 1,
+        noticeId: 30,
+      );
+
+      expect(reads.readMembers.single.profileColor, ProfileColor.lightBlue);
+      expect(reads.unreadMembers.single.profileColor, ProfileColor.lightBlue);
+    });
+
     test('읽지 않은 구성원은 읽은 시각 없이 담는다', () async {
       final repository = _repositoryWith(200, _readsBody);
 

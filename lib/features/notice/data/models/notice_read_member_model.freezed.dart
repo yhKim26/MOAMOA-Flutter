@@ -16,7 +16,8 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$NoticeReadMemberModel {
 
- int get memberId; String? get userName;/// ISO-8601 (KST). unreadMembers 항목에는 없습니다.
+ int get memberId; String? get userName;/// LIGHT_BLUE · GRAY · BLUE · DARK
+ String? get profileColor;/// ISO-8601 (KST). unreadMembers 항목에는 없습니다.
  String? get readAt;
 /// Create a copy of NoticeReadMemberModel
 /// with the given fields replaced by the non-null parameter values.
@@ -30,16 +31,16 @@ $NoticeReadMemberModelCopyWith<NoticeReadMemberModel> get copyWith => _$NoticeRe
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is NoticeReadMemberModel&&(identical(other.memberId, memberId) || other.memberId == memberId)&&(identical(other.userName, userName) || other.userName == userName)&&(identical(other.readAt, readAt) || other.readAt == readAt));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is NoticeReadMemberModel&&(identical(other.memberId, memberId) || other.memberId == memberId)&&(identical(other.userName, userName) || other.userName == userName)&&(identical(other.profileColor, profileColor) || other.profileColor == profileColor)&&(identical(other.readAt, readAt) || other.readAt == readAt));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,memberId,userName,readAt);
+int get hashCode => Object.hash(runtimeType,memberId,userName,profileColor,readAt);
 
 @override
 String toString() {
-  return 'NoticeReadMemberModel(memberId: $memberId, userName: $userName, readAt: $readAt)';
+  return 'NoticeReadMemberModel(memberId: $memberId, userName: $userName, profileColor: $profileColor, readAt: $readAt)';
 }
 
 
@@ -50,7 +51,7 @@ abstract mixin class $NoticeReadMemberModelCopyWith<$Res>  {
   factory $NoticeReadMemberModelCopyWith(NoticeReadMemberModel value, $Res Function(NoticeReadMemberModel) _then) = _$NoticeReadMemberModelCopyWithImpl;
 @useResult
 $Res call({
- int memberId, String? userName, String? readAt
+ int memberId, String? userName, String? profileColor, String? readAt
 });
 
 
@@ -67,10 +68,11 @@ class _$NoticeReadMemberModelCopyWithImpl<$Res>
 
 /// Create a copy of NoticeReadMemberModel
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? memberId = null,Object? userName = freezed,Object? readAt = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? memberId = null,Object? userName = freezed,Object? profileColor = freezed,Object? readAt = freezed,}) {
   return _then(NoticeReadMemberModel(
 memberId: null == memberId ? _self.memberId : memberId // ignore: cast_nullable_to_non_nullable
 as int,userName: freezed == userName ? _self.userName : userName // ignore: cast_nullable_to_non_nullable
+as String?,profileColor: freezed == profileColor ? _self.profileColor : profileColor // ignore: cast_nullable_to_non_nullable
 as String?,readAt: freezed == readAt ? _self.readAt : readAt // ignore: cast_nullable_to_non_nullable
 as String?,
   ));
@@ -157,10 +159,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( int memberId,  String? userName,  String? readAt)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( int memberId,  String? userName,  String? profileColor,  String? readAt)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _NoticeReadMemberModel() when $default != null:
-return $default(_that.memberId,_that.userName,_that.readAt);case _:
+return $default(_that.memberId,_that.userName,_that.profileColor,_that.readAt);case _:
   return orElse();
 
 }
@@ -178,10 +180,10 @@ return $default(_that.memberId,_that.userName,_that.readAt);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( int memberId,  String? userName,  String? readAt)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( int memberId,  String? userName,  String? profileColor,  String? readAt)  $default,) {final _that = this;
 switch (_that) {
 case _NoticeReadMemberModel():
-return $default(_that.memberId,_that.userName,_that.readAt);case _:
+return $default(_that.memberId,_that.userName,_that.profileColor,_that.readAt);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -198,10 +200,10 @@ return $default(_that.memberId,_that.userName,_that.readAt);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( int memberId,  String? userName,  String? readAt)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( int memberId,  String? userName,  String? profileColor,  String? readAt)?  $default,) {final _that = this;
 switch (_that) {
 case _NoticeReadMemberModel() when $default != null:
-return $default(_that.memberId,_that.userName,_that.readAt);case _:
+return $default(_that.memberId,_that.userName,_that.profileColor,_that.readAt);case _:
   return null;
 
 }
@@ -213,11 +215,13 @@ return $default(_that.memberId,_that.userName,_that.readAt);case _:
 @JsonSerializable()
 
 class _NoticeReadMemberModel implements NoticeReadMemberModel {
-  const _NoticeReadMemberModel({required this.memberId, this.userName, this.readAt});
+  const _NoticeReadMemberModel({required this.memberId, this.userName, this.profileColor, this.readAt});
   factory _NoticeReadMemberModel.fromJson(Map<String, dynamic> json) => _$NoticeReadMemberModelFromJson(json);
 
 @override final  int memberId;
 @override final  String? userName;
+/// LIGHT_BLUE · GRAY · BLUE · DARK
+@override final  String? profileColor;
 /// ISO-8601 (KST). unreadMembers 항목에는 없습니다.
 @override final  String? readAt;
 
@@ -234,16 +238,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _NoticeReadMemberModel&&(identical(other.memberId, memberId) || other.memberId == memberId)&&(identical(other.userName, userName) || other.userName == userName)&&(identical(other.readAt, readAt) || other.readAt == readAt));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _NoticeReadMemberModel&&(identical(other.memberId, memberId) || other.memberId == memberId)&&(identical(other.userName, userName) || other.userName == userName)&&(identical(other.profileColor, profileColor) || other.profileColor == profileColor)&&(identical(other.readAt, readAt) || other.readAt == readAt));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,memberId,userName,readAt);
+int get hashCode => Object.hash(runtimeType,memberId,userName,profileColor,readAt);
 
 @override
 String toString() {
-  return 'NoticeReadMemberModel(memberId: $memberId, userName: $userName, readAt: $readAt)';
+  return 'NoticeReadMemberModel(memberId: $memberId, userName: $userName, profileColor: $profileColor, readAt: $readAt)';
 }
 
 
@@ -254,7 +258,7 @@ abstract mixin class _$NoticeReadMemberModelCopyWith<$Res> implements $NoticeRea
   factory _$NoticeReadMemberModelCopyWith(_NoticeReadMemberModel value, $Res Function(_NoticeReadMemberModel) _then) = __$NoticeReadMemberModelCopyWithImpl;
 @override @useResult
 $Res call({
- int memberId, String? userName, String? readAt
+ int memberId, String? userName, String? profileColor, String? readAt
 });
 
 
@@ -271,10 +275,11 @@ class __$NoticeReadMemberModelCopyWithImpl<$Res>
 
 /// Create a copy of NoticeReadMemberModel
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? memberId = null,Object? userName = freezed,Object? readAt = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? memberId = null,Object? userName = freezed,Object? profileColor = freezed,Object? readAt = freezed,}) {
   return _then(_NoticeReadMemberModel(
 memberId: null == memberId ? _self.memberId : memberId // ignore: cast_nullable_to_non_nullable
 as int,userName: freezed == userName ? _self.userName : userName // ignore: cast_nullable_to_non_nullable
+as String?,profileColor: freezed == profileColor ? _self.profileColor : profileColor // ignore: cast_nullable_to_non_nullable
 as String?,readAt: freezed == readAt ? _self.readAt : readAt // ignore: cast_nullable_to_non_nullable
 as String?,
   ));
