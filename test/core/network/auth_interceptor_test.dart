@@ -91,12 +91,18 @@ class _FakeServer implements HttpClientAdapter {
 }
 
 /// [readFailsFrom] 번째 read 부터, 또는 재발급 실패로 지울 때 예외를 던지는 토큰 저장소
+///
+/// [throwsError] 가 true 이면 Exception 대신 Error(StateError)를 던집니다.
 class _FailingTokenStorage extends TokenStorageImpl {
-  _FailingTokenStorage({this.readFailsFrom, this.clearFails = false})
-    : super(secureStorage: const FlutterSecureStorage());
+  _FailingTokenStorage({
+    this.readFailsFrom,
+    this.clearFails = false,
+    this.throwsError = false,
+  }) : super(secureStorage: const FlutterSecureStorage());
 
   final int? readFailsFrom;
   final bool clearFails;
+  final bool throwsError;
   int _readCount = 0;
 
   @override
@@ -104,6 +110,7 @@ class _FailingTokenStorage extends TokenStorageImpl {
     _readCount++;
     final readFailsFrom = this.readFailsFrom;
     if (readFailsFrom != null && _readCount >= readFailsFrom) {
+      if (throwsError) throw StateError('저장소 코드 오류');
       throw Exception('저장소 오류');
     }
     return super.read();
@@ -514,6 +521,37 @@ void main() {
         );
 
         expect(server.requests.single.headers['Authorization'], isNull);
+      });
+
+      test('토큰을 읽다가 Error 가 나도 멈추지 않고 토큰 없이 요청을 보낸다', () async {
+        final dio = dioWith(
+          _FailingTokenStorage(readFailsFrom: 1, throwsError: true),
+        );
+
+        await expectLater(
+          dio.get<dynamic>('/v1/me'),
+          throwsA(isA<DioException>()),
+        );
+
+        expect(server.requests.single.headers['Authorization'], isNull);
+      });
+
+      test('401 처리 중 Error 가 나도 멈추지 않고 원래 401 오류를 넘긴다', () async {
+        server.validAccessToken = 'expired-on-server';
+        final dio = dioWith(
+          _FailingTokenStorage(readFailsFrom: 2, throwsError: true),
+        );
+
+        await expectLater(
+          dio.get<dynamic>('/v1/me'),
+          throwsA(
+            isA<DioException>().having(
+              (e) => e.response?.statusCode,
+              'statusCode',
+              401,
+            ),
+          ),
+        );
       });
 
       test('401 처리 중 토큰을 읽지 못하면 멈추지 않고 원래 401 오류를 넘긴다', () async {

@@ -9,4 +9,10 @@ abstract class Jwt with _$Jwt {
     required String accessToken,
     required String refreshToken,
   }) = _Jwt;
+
+  const Jwt._();
+
+  /// 로그나 예외 메시지에 실려도 토큰이 드러나지 않도록 값을 출력하지 않습니다.
+  @override
+  String toString() => 'Jwt(accessToken: ***, refreshToken: ***)';
 }

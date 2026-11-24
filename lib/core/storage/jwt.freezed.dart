@@ -33,10 +33,6 @@ bool operator ==(Object other) {
 @override
 int get hashCode => Object.hash(runtimeType,accessToken,refreshToken);
 
-@override
-String toString() {
-  return 'Jwt(accessToken: $accessToken, refreshToken: $refreshToken)';
-}
 
 
 }
@@ -207,8 +203,8 @@ return $default(_that.accessToken,_that.refreshToken);case _:
 /// @nodoc
 
 
-class _Jwt implements Jwt {
-  const _Jwt({required this.accessToken, required this.refreshToken});
+class _Jwt extends Jwt {
+  const _Jwt({required this.accessToken, required this.refreshToken}): super._();
   
 
 @override final  String accessToken;
@@ -231,10 +227,6 @@ bool operator ==(Object other) {
 @override
 int get hashCode => Object.hash(runtimeType,accessToken,refreshToken);
 
-@override
-String toString() {
-  return 'Jwt(accessToken: $accessToken, refreshToken: $refreshToken)';
-}
 
 
 }

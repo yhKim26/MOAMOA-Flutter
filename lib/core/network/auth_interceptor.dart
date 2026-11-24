@@ -49,8 +49,9 @@ class AuthInterceptor extends QueuedInterceptor {
       try {
         final tokens = await _tokenStorage.read();
         if (tokens != null) _attach(options, tokens.accessToken);
-      } on Exception {
+      } catch (_) {
         // 저장소를 읽지 못하면 토큰 없이 보냅니다. 여기서 멈추면 뒤의 요청까지 모두 기다립니다.
+        // Exception 뿐 아니라 Error(TypeError·StateError 등)도 받아야 handler 를 반드시 부를 수 있습니다.
       }
     }
     handler.next(options);
@@ -85,8 +86,8 @@ class AuthInterceptor extends QueuedInterceptor {
       handler.resolve(await _plainDio.fetch<dynamic>(options));
     } on DioException catch (retryError) {
       handler.next(retryError);
-    } on Exception {
-      // 토큰 저장소 오류 등은 원래 오류(401·403)로 넘깁니다.
+    } catch (_) {
+      // 토큰 저장소 오류 등은 원래 오류(401·403)로 넘깁니다. Error 계열도 받아 handler 를 반드시 부릅니다.
       handler.next(err);
     }
   }
