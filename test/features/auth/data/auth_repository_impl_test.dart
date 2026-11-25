@@ -53,7 +53,7 @@ void main() {
     test('재설정 메일 요청은 이메일을 담아 POST .../password-reset-requests 로 보낸다', () async {
       final repository = repositoryWith(200, _ok);
 
-      await repository.requestPasswordReset(email: 'moa@example.com');
+      await repository.requestPasswordResetEmail(email: 'moa@example.com');
 
       final request = adapter.requests.single;
       expect(request.method, 'POST');
@@ -114,7 +114,7 @@ void main() {
       );
 
       await expectLater(
-        repository.requestPasswordReset(email: 'moa@example.com'),
+        repository.requestPasswordResetEmail(email: 'moa@example.com'),
         throwsA(const ApiException(code: ApiErrorCode.network)),
       );
     });

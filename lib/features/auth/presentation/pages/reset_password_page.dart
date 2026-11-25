@@ -36,7 +36,7 @@ class _ResetPasswordPageState extends ConsumerState<ResetPasswordPage> {
   bool _showErrors = false;
 
   String? get _passwordError =>
-      _showErrors ? _passwordController.text.passwordError : null;
+      _showErrors ? _passwordController.text.invalidPasswordMessage : null;
 
   bool get _isConfirmMatched =>
       _confirmController.text == _passwordController.text;
@@ -57,7 +57,8 @@ class _ResetPasswordPageState extends ConsumerState<ResetPasswordPage> {
 
   /// 비밀번호 규칙에 맞고 확인이 일치할 때만 요청합니다.
   void _submit() {
-    if (_passwordController.text.passwordError != null || !_isConfirmMatched) {
+    if (_passwordController.text.invalidPasswordMessage != null ||
+        !_isConfirmMatched) {
       setState(() => _showErrors = true);
       return;
     }

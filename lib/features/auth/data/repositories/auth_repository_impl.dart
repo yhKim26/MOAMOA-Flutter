@@ -13,9 +13,9 @@ class AuthRepositoryImpl implements AuthRepository {
   final AuthRemoteDataSource _authRemoteDataSource;
 
   @override
-  Future<void> requestPasswordReset({required String email}) {
+  Future<void> requestPasswordResetEmail({required String email}) {
     return _guard(
-      () => _authRemoteDataSource.requestPasswordReset(
+      () => _authRemoteDataSource.requestPasswordResetMail(
         PasswordResetMailRequest(email: email),
       ),
     );

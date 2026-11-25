@@ -28,10 +28,10 @@ final class RequestPasswordResetImpl implements RequestPasswordReset {
   /// 이메일 앞뒤 공백을 빼고 보냅니다. 형식이 다르면 보내지 않습니다.
   @override
   Future<void> call(RequestPasswordResetParams params) async {
-    final error = params.email.emailError;
+    final error = params.email.invalidEmailMessage;
     if (error != null) {
       throw ApiException(code: ApiErrorCode.validation, message: error);
     }
-    await _authRepository.requestPasswordReset(email: params.email.trim());
+    await _authRepository.requestPasswordResetEmail(email: params.email.trim());
   }
 }

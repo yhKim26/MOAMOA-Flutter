@@ -17,7 +17,7 @@ class FakeAuthRepository implements AuthRepository {
   Completer<void>? gate;
 
   @override
-  Future<void> requestPasswordReset({required String email}) async {
+  Future<void> requestPasswordResetEmail({required String email}) async {
     requestedEmails.add(email);
     await gate?.future;
     if (error != null) throw error!;

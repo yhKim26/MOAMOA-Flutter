@@ -11,7 +11,7 @@ extension AuthInputRulesX on String {
   static final _allowedPassword = RegExp(r'^[!-~]+$');
 
   /// 이메일이 비었거나 형식이 다르면 안내 문구, 맞으면 null 입니다.
-  String? get emailError {
+  String? get invalidEmailMessage {
     final email = trim();
     if (email.isEmpty) return '이메일을 입력해주세요.';
     if (!_email.hasMatch(email)) return '올바른 이메일 형식이 아니에요.';
@@ -19,7 +19,7 @@ extension AuthInputRulesX on String {
   }
 
   /// 비밀번호가 규칙(영문과 숫자 포함 8~72자, 영문·숫자·기호만)에 맞지 않으면 안내 문구, 맞으면 null 입니다.
-  String? get passwordError {
+  String? get invalidPasswordMessage {
     if (isEmpty) return '비밀번호를 입력해주세요.';
     if (!_allowedPassword.hasMatch(this)) return '영문, 숫자, 기호만 사용할 수 있어요.';
     if (length < 8 || length > 72) return '8~72자로 입력해주세요.';

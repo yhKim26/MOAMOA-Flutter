@@ -32,7 +32,7 @@ class _ForgotPasswordPageState extends ConsumerState<ForgotPasswordPage> {
   bool _showEmailError = false;
 
   String? get _emailError =>
-      _showEmailError ? _emailController.text.emailError : null;
+      _showEmailError ? _emailController.text.invalidEmailMessage : null;
 
   @override
   void dispose() {
@@ -46,11 +46,12 @@ class _ForgotPasswordPageState extends ConsumerState<ForgotPasswordPage> {
 
   /// 이메일 형식이 맞을 때만 재설정 메일을 요청합니다.
   void _submit() {
-    if (_emailController.text.emailError != null) {
+    final email = _emailController.text.trim();
+    if (email.invalidEmailMessage != null) {
       setState(() => _showEmailError = true);
       return;
     }
-    ref.read(forgotPasswordProvider.notifier).request(_emailController.text);
+    ref.read(forgotPasswordProvider.notifier).request(email);
   }
 
   void _onStateChanged(ForgotPasswordState next) {
@@ -67,10 +68,6 @@ class _ForgotPasswordPageState extends ConsumerState<ForgotPasswordPage> {
   /// 돌아갈 화면이 있는지. 웹에서 주소로 바로 열면 없습니다.
   bool get _canGoBack => Navigator.canPop(context);
 
-  /// 뒤로 버튼이 없으면 다른 화면과 제목 높이를 맞춥니다. (Top Bar 56 + 4)
-  EdgeInsets get _bodyPadding =>
-      EdgeInsets.fromLTRB(20, _canGoBack ? 4 : 60, 20, 24);
-
   @override
   Widget build(BuildContext context) {
     ref.listen(forgotPasswordProvider, (_, next) => _onStateChanged(next));
@@ -82,7 +79,8 @@ class _ForgotPasswordPageState extends ConsumerState<ForgotPasswordPage> {
       appBar: _canGoBack ? MoaAppBar() : null,
       body: SafeArea(
         child: ListView(
-          padding: _bodyPadding,
+          // 뒤로 버튼이 없으면 다른 화면과 제목 높이를 맞춥니다. (Top Bar 56 + 4)
+          padding: EdgeInsets.fromLTRB(20, _canGoBack ? 4 : 60, 20, 24),
           children: [
             const AuthPageTitle(
               title: '비밀번호를 잊으셨나요?',

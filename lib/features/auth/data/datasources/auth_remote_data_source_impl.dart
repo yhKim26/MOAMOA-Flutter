@@ -13,7 +13,9 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   final Dio _dio;
 
   @override
-  Future<void> requestPasswordReset(PasswordResetMailRequest request) async {
+  Future<void> requestPasswordResetMail(
+    PasswordResetMailRequest request,
+  ) async {
     await _dio.post<Map<String, dynamic>>(
       '/v1/auth/password-reset-requests',
       data: request.toJson(),

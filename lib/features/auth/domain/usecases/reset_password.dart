@@ -29,7 +29,7 @@ final class ResetPasswordImpl implements ResetPassword {
   /// 비밀번호 규칙에 맞지 않으면 보내지 않습니다. 비밀번호는 공백을 빼지 않고 그대로 보냅니다.
   @override
   Future<void> call(ResetPasswordParams params) async {
-    final error = params.newPassword.passwordError;
+    final error = params.newPassword.invalidPasswordMessage;
     if (error != null) {
       throw ApiException(code: ApiErrorCode.validation, message: error);
     }
