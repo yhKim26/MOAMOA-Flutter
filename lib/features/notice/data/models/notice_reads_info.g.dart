@@ -1,13 +1,13 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'notice_reads_model.dart';
+part of 'notice_reads_info.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
 
-_NoticeReadsModel _$NoticeReadsModelFromJson(Map<String, dynamic> json) =>
-    _NoticeReadsModel(
+_NoticeReadsInfo _$NoticeReadsInfoFromJson(Map<String, dynamic> json) =>
+    _NoticeReadsInfo(
       readCount: (json['readCount'] as num).toInt(),
       totalCount: (json['totalCount'] as num).toInt(),
       readMembers: (json['readMembers'] as List<dynamic>)
@@ -18,7 +18,7 @@ _NoticeReadsModel _$NoticeReadsModelFromJson(Map<String, dynamic> json) =>
           .toList(),
     );
 
-Map<String, dynamic> _$NoticeReadsModelToJson(_NoticeReadsModel instance) =>
+Map<String, dynamic> _$NoticeReadsInfoToJson(_NoticeReadsInfo instance) =>
     <String, dynamic>{
       'readCount': instance.readCount,
       'totalCount': instance.totalCount,

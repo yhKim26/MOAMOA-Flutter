@@ -1012,6 +1012,134 @@ void main() {
         expect(find.text('읽음 현황을 불러오지 못했어요.'), findsNothing);
         expect(find.text('0/0'), findsOneWidget);
       });
+
+      group('공지 목록의 읽은 수 갱신', () {
+        const readsRequest = NoticeDetailRequest(meetingId: 1, noticeId: 22);
+        const reads = NoticeReads(
+          readCount: 1,
+          totalCount: 2,
+          readMembers: [NoticeReadMember(memberId: 3, userName: '김모아')],
+          unreadMembers: [NoticeReadMember(memberId: 5, userName: '이모아')],
+        );
+
+        late FakeNoticeRepository repository;
+        late ProviderContainer container;
+
+        setUp(() {
+          repository = FakeNoticeRepository(
+            notices: [
+              for (var id = 1; id <= 25; id++)
+                buildNotice(id, readCount: 0, totalCount: 2),
+            ],
+          )..readsByNoticeId[22] = reads;
+          container = ProviderContainer.test(
+            overrides: [noticeRepositoryProvider.overrideWithValue(repository)],
+            retry: (_, _) => null,
+          );
+        });
+
+        /// 같은 컨테이너 위에 [body] 를 띄웁니다. (화면을 바꿔 끼워도 Provider 상태는 유지)
+        Future<void> pumpBody(WidgetTester tester, Widget body) {
+          return tester.pumpWidget(
+            UncontrolledProviderScope(
+              container: container,
+              child: MaterialApp(home: Scaffold(body: body)),
+            ),
+          );
+        }
+
+        /// 공지 목록 화면이 열려 있는 것처럼 구독하고 첫 페이지를 기다립니다.
+        Future<void> openList() async {
+          container.listen(noticeListProvider(1), (_, _) {});
+          await container.read(noticeListProvider(1).future);
+        }
+
+        List<Notice> listedNotices() =>
+            container.read(noticeListProvider(1)).requireValue.notices;
+
+        testWidgets('읽음 현황을 받으면 목록에서 그 공지의 읽은 수만 바꾼다', (tester) async {
+          // 첫 페이지에 있는 공지를 읽는 상황입니다. (22 는 둘째 페이지)
+          repository.readsByNoticeId[3] = reads;
+          await openList();
+
+          await pumpBody(
+            tester,
+            const NoticeReadsView(
+              request: NoticeDetailRequest(meetingId: 1, noticeId: 3),
+            ),
+          );
+          await tester.pumpAndSettle();
+
+          final notices = listedNotices();
+          expect(notices.firstWhere((notice) => notice.id == 3).readCount, 1);
+          expect(
+            notices.where((notice) => notice.readCount == 0),
+            hasLength(19),
+          );
+        });
+
+        testWidgets('더 불러온 페이지의 공지를 읽어도 불러온 페이지를 유지한다', (tester) async {
+          await openList();
+          await container.read(noticeListProvider(1).notifier).loadMore();
+
+          await pumpBody(tester, const NoticeReadsView(request: readsRequest));
+          await tester.pumpAndSettle();
+
+          expect(repository.getNoticesCallCount, 2);
+          expect(listedNotices(), hasLength(25));
+          expect(
+            listedNotices().firstWhere((notice) => notice.id == 22).readCount,
+            1,
+          );
+        });
+
+        testWidgets('읽음 현황 응답 전에 화면을 닫으면 목록을 바꾸지 않는다', (tester) async {
+          repository.readsGate = Completer<void>();
+          await openList();
+          await container.read(noticeListProvider(1).notifier).loadMore();
+          await pumpBody(tester, const NoticeReadsView(request: readsRequest));
+          await tester.pump();
+
+          await pumpBody(tester, const SizedBox());
+          await tester.pump();
+          repository.readsGate!.complete();
+          await tester.pumpAndSettle();
+
+          expect(
+            listedNotices().every((notice) => notice.readCount == 0),
+            isTrue,
+          );
+        });
+
+        testWidgets('공지 목록이 열려 있지 않으면 읽음 현황을 받아도 목록을 불러오지 않는다', (tester) async {
+          await pumpBody(tester, const NoticeReadsView(request: readsRequest));
+          await tester.pumpAndSettle();
+
+          expect(repository.getNoticesCallCount, 0);
+        });
+
+        testWidgets('목록이 오류 상태면 늦게 온 읽음 현황이 오류를 지우지 않는다', (tester) async {
+          repository.readsGate = Completer<void>();
+          await openList();
+          await container.read(noticeListProvider(1).notifier).loadMore();
+          await pumpBody(tester, const NoticeReadsView(request: readsRequest));
+          await tester.pump();
+
+          // 읽음 현황 응답을 기다리는 사이에 목록 조회가 권한 오류로 실패합니다.
+          repository.error = const NoticeException(
+            '모임 구성원이 아닙니다.',
+            code: 'FORBIDDEN',
+          );
+          container.invalidate(noticeListProvider(1));
+          await tester.pump();
+          await tester.pump();
+          repository.error = null;
+          repository.readsGate!.complete();
+          await tester.pumpAndSettle();
+
+          expect(container.read(noticeListProvider(1)).hasError, isTrue);
+        });
+      });
     });
 
     testWidgets('수정 후 상세를 다시 불러오는 동안에도 이전 내용을 그대로 보여준다', (tester) async {

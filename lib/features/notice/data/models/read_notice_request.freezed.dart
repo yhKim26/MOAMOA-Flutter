@@ -3,7 +3,7 @@
 // ignore_for_file: type=lint, type=warning, deprecated_member_use, deprecated_member_use_from_same_package
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
-part of 'fetch_notice_reads_request.dart';
+part of 'read_notice_request.dart';
 
 // **************************************************************************
 // FreezedGenerator
@@ -13,20 +13,20 @@ part of 'fetch_notice_reads_request.dart';
 // dart format off
 T _$identity<T>(T value) => value;
 /// @nodoc
-mixin _$FetchNoticeReadsRequest {
+mixin _$ReadNoticeRequest {
 
  int get meetingId; int get noticeId;
-/// Create a copy of FetchNoticeReadsRequest
+/// Create a copy of ReadNoticeRequest
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
 @pragma('vm:prefer-inline')
-$FetchNoticeReadsRequestCopyWith<FetchNoticeReadsRequest> get copyWith => _$FetchNoticeReadsRequestCopyWithImpl<FetchNoticeReadsRequest>(this as FetchNoticeReadsRequest, _$identity);
+$ReadNoticeRequestCopyWith<ReadNoticeRequest> get copyWith => _$ReadNoticeRequestCopyWithImpl<ReadNoticeRequest>(this as ReadNoticeRequest, _$identity);
 
 
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is FetchNoticeReadsRequest&&(identical(other.meetingId, meetingId) || other.meetingId == meetingId)&&(identical(other.noticeId, noticeId) || other.noticeId == noticeId));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is ReadNoticeRequest&&(identical(other.meetingId, meetingId) || other.meetingId == meetingId)&&(identical(other.noticeId, noticeId) || other.noticeId == noticeId));
 }
 
 
@@ -35,15 +35,15 @@ int get hashCode => Object.hash(runtimeType,meetingId,noticeId);
 
 @override
 String toString() {
-  return 'FetchNoticeReadsRequest(meetingId: $meetingId, noticeId: $noticeId)';
+  return 'ReadNoticeRequest(meetingId: $meetingId, noticeId: $noticeId)';
 }
 
 
 }
 
 /// @nodoc
-abstract mixin class $FetchNoticeReadsRequestCopyWith<$Res>  {
-  factory $FetchNoticeReadsRequestCopyWith(FetchNoticeReadsRequest value, $Res Function(FetchNoticeReadsRequest) _then) = _$FetchNoticeReadsRequestCopyWithImpl;
+abstract mixin class $ReadNoticeRequestCopyWith<$Res>  {
+  factory $ReadNoticeRequestCopyWith(ReadNoticeRequest value, $Res Function(ReadNoticeRequest) _then) = _$ReadNoticeRequestCopyWithImpl;
 @useResult
 $Res call({
  int meetingId, int noticeId
@@ -54,17 +54,17 @@ $Res call({
 
 }
 /// @nodoc
-class _$FetchNoticeReadsRequestCopyWithImpl<$Res>
-    implements $FetchNoticeReadsRequestCopyWith<$Res> {
-  _$FetchNoticeReadsRequestCopyWithImpl(this._self, this._then);
+class _$ReadNoticeRequestCopyWithImpl<$Res>
+    implements $ReadNoticeRequestCopyWith<$Res> {
+  _$ReadNoticeRequestCopyWithImpl(this._self, this._then);
 
-  final FetchNoticeReadsRequest _self;
-  final $Res Function(FetchNoticeReadsRequest) _then;
+  final ReadNoticeRequest _self;
+  final $Res Function(ReadNoticeRequest) _then;
 
-/// Create a copy of FetchNoticeReadsRequest
+/// Create a copy of ReadNoticeRequest
 /// with the given fields replaced by the non-null parameter values.
 @pragma('vm:prefer-inline') @override $Res call({Object? meetingId = null,Object? noticeId = null,}) {
-  return _then(FetchNoticeReadsRequest(
+  return _then(ReadNoticeRequest(
 meetingId: null == meetingId ? _self.meetingId : meetingId // ignore: cast_nullable_to_non_nullable
 as int,noticeId: null == noticeId ? _self.noticeId : noticeId // ignore: cast_nullable_to_non_nullable
 as int,
@@ -74,8 +74,8 @@ as int,
 }
 
 
-/// Adds pattern-matching-related methods to [FetchNoticeReadsRequest].
-extension FetchNoticeReadsRequestPatterns on FetchNoticeReadsRequest {
+/// Adds pattern-matching-related methods to [ReadNoticeRequest].
+extension ReadNoticeRequestPatterns on ReadNoticeRequest {
 /// A variant of `map` that fallback to returning `orElse`.
 ///
 /// It is equivalent to doing:
@@ -88,10 +88,10 @@ extension FetchNoticeReadsRequestPatterns on FetchNoticeReadsRequest {
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeMap<TResult extends Object?>(TResult Function( _FetchNoticeReadsRequest value)?  $default,{required TResult orElse(),}){
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>(TResult Function( _ReadNoticeRequest value)?  $default,{required TResult orElse(),}){
 final _that = this;
 switch (_that) {
-case _FetchNoticeReadsRequest() when $default != null:
+case _ReadNoticeRequest() when $default != null:
 return $default(_that);case _:
   return orElse();
 
@@ -110,10 +110,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult map<TResult extends Object?>(TResult Function( _FetchNoticeReadsRequest value)  $default,){
+@optionalTypeArgs TResult map<TResult extends Object?>(TResult Function( _ReadNoticeRequest value)  $default,){
 final _that = this;
 switch (_that) {
-case _FetchNoticeReadsRequest():
+case _ReadNoticeRequest():
 return $default(_that);case _:
   throw StateError('Unexpected subclass');
 
@@ -131,10 +131,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>(TResult? Function( _FetchNoticeReadsRequest value)?  $default,){
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>(TResult? Function( _ReadNoticeRequest value)?  $default,){
 final _that = this;
 switch (_that) {
-case _FetchNoticeReadsRequest() when $default != null:
+case _ReadNoticeRequest() when $default != null:
 return $default(_that);case _:
   return null;
 
@@ -154,7 +154,7 @@ return $default(_that);case _:
 
 @optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( int meetingId,  int noticeId)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
-case _FetchNoticeReadsRequest() when $default != null:
+case _ReadNoticeRequest() when $default != null:
 return $default(_that.meetingId,_that.noticeId);case _:
   return orElse();
 
@@ -175,7 +175,7 @@ return $default(_that.meetingId,_that.noticeId);case _:
 
 @optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( int meetingId,  int noticeId)  $default,) {final _that = this;
 switch (_that) {
-case _FetchNoticeReadsRequest():
+case _ReadNoticeRequest():
 return $default(_that.meetingId,_that.noticeId);case _:
   throw StateError('Unexpected subclass');
 
@@ -195,7 +195,7 @@ return $default(_that.meetingId,_that.noticeId);case _:
 
 @optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( int meetingId,  int noticeId)?  $default,) {final _that = this;
 switch (_that) {
-case _FetchNoticeReadsRequest() when $default != null:
+case _ReadNoticeRequest() when $default != null:
 return $default(_that.meetingId,_that.noticeId);case _:
   return null;
 
@@ -207,24 +207,24 @@ return $default(_that.meetingId,_that.noticeId);case _:
 /// @nodoc
 
 
-class _FetchNoticeReadsRequest implements FetchNoticeReadsRequest {
-  const _FetchNoticeReadsRequest({required this.meetingId, required this.noticeId});
+class _ReadNoticeRequest implements ReadNoticeRequest {
+  const _ReadNoticeRequest({required this.meetingId, required this.noticeId});
   
 
 @override final  int meetingId;
 @override final  int noticeId;
 
-/// Create a copy of FetchNoticeReadsRequest
+/// Create a copy of ReadNoticeRequest
 /// with the given fields replaced by the non-null parameter values.
 @override @JsonKey(includeFromJson: false, includeToJson: false)
 @pragma('vm:prefer-inline')
-_$FetchNoticeReadsRequestCopyWith<_FetchNoticeReadsRequest> get copyWith => __$FetchNoticeReadsRequestCopyWithImpl<_FetchNoticeReadsRequest>(this, _$identity);
+_$ReadNoticeRequestCopyWith<_ReadNoticeRequest> get copyWith => __$ReadNoticeRequestCopyWithImpl<_ReadNoticeRequest>(this, _$identity);
 
 
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _FetchNoticeReadsRequest&&(identical(other.meetingId, meetingId) || other.meetingId == meetingId)&&(identical(other.noticeId, noticeId) || other.noticeId == noticeId));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _ReadNoticeRequest&&(identical(other.meetingId, meetingId) || other.meetingId == meetingId)&&(identical(other.noticeId, noticeId) || other.noticeId == noticeId));
 }
 
 
@@ -233,15 +233,15 @@ int get hashCode => Object.hash(runtimeType,meetingId,noticeId);
 
 @override
 String toString() {
-  return 'FetchNoticeReadsRequest(meetingId: $meetingId, noticeId: $noticeId)';
+  return 'ReadNoticeRequest(meetingId: $meetingId, noticeId: $noticeId)';
 }
 
 
 }
 
 /// @nodoc
-abstract mixin class _$FetchNoticeReadsRequestCopyWith<$Res> implements $FetchNoticeReadsRequestCopyWith<$Res> {
-  factory _$FetchNoticeReadsRequestCopyWith(_FetchNoticeReadsRequest value, $Res Function(_FetchNoticeReadsRequest) _then) = __$FetchNoticeReadsRequestCopyWithImpl;
+abstract mixin class _$ReadNoticeRequestCopyWith<$Res> implements $ReadNoticeRequestCopyWith<$Res> {
+  factory _$ReadNoticeRequestCopyWith(_ReadNoticeRequest value, $Res Function(_ReadNoticeRequest) _then) = __$ReadNoticeRequestCopyWithImpl;
 @override @useResult
 $Res call({
  int meetingId, int noticeId
@@ -252,17 +252,17 @@ $Res call({
 
 }
 /// @nodoc
-class __$FetchNoticeReadsRequestCopyWithImpl<$Res>
-    implements _$FetchNoticeReadsRequestCopyWith<$Res> {
-  __$FetchNoticeReadsRequestCopyWithImpl(this._self, this._then);
+class __$ReadNoticeRequestCopyWithImpl<$Res>
+    implements _$ReadNoticeRequestCopyWith<$Res> {
+  __$ReadNoticeRequestCopyWithImpl(this._self, this._then);
 
-  final _FetchNoticeReadsRequest _self;
-  final $Res Function(_FetchNoticeReadsRequest) _then;
+  final _ReadNoticeRequest _self;
+  final $Res Function(_ReadNoticeRequest) _then;
 
-/// Create a copy of FetchNoticeReadsRequest
+/// Create a copy of ReadNoticeRequest
 /// with the given fields replaced by the non-null parameter values.
 @override @pragma('vm:prefer-inline') $Res call({Object? meetingId = null,Object? noticeId = null,}) {
-  return _then(_FetchNoticeReadsRequest(
+  return _then(_ReadNoticeRequest(
 meetingId: null == meetingId ? _self.meetingId : meetingId // ignore: cast_nullable_to_non_nullable
 as int,noticeId: null == noticeId ? _self.noticeId : noticeId // ignore: cast_nullable_to_non_nullable
 as int,

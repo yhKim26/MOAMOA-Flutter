@@ -203,6 +203,76 @@ void main() {
       );
     });
 
+    test('updateReadCount 는 새로 불러오는 중이면 읽은 수를 바꾸지 않는다', () async {
+      await openList();
+      final viewModel = container.read(noticeListProvider(meetingId).notifier);
+      final page0Gate = Completer<void>();
+      repository.pageGates[0] = page0Gate;
+      container.invalidate(noticeListProvider(meetingId));
+      await Future<void>.delayed(Duration.zero);
+
+      viewModel.updateReadCount(noticeId: 2, readCount: 3, totalCount: 5);
+      page0Gate.complete();
+      final state = await container.read(noticeListProvider(meetingId).future);
+
+      expect(state.notices[1].readCount, isNull);
+    });
+
+    test('updateReadCount 는 목록이 오류 상태면 이전 목록으로 성공 상태를 만들지 않는다', () async {
+      await openList();
+      final viewModel = container.read(noticeListProvider(meetingId).notifier);
+      repository.error = const NoticeException(
+        '모임 구성원이 아닙니다.',
+        code: 'FORBIDDEN',
+      );
+      container.invalidate(noticeListProvider(meetingId));
+      await Future<void>.delayed(Duration.zero);
+      await Future<void>.delayed(Duration.zero);
+      expect(container.read(noticeListProvider(meetingId)).hasError, isTrue);
+
+      viewModel.updateReadCount(noticeId: 2, readCount: 3, totalCount: 5);
+
+      final state = container.read(noticeListProvider(meetingId));
+      expect(state.hasError, isTrue);
+      expect(state.error, isA<NoticeException>());
+    });
+
+    test('다음 페이지 응답을 기다리는 사이에 바뀐 읽은 수는 이어 붙인 뒤에도 유지된다', () async {
+      await openList();
+      final viewModel = container.read(noticeListProvider(meetingId).notifier);
+      final page1Gate = Completer<void>();
+      repository.pageGates[1] = page1Gate;
+      final loadMore = viewModel.loadMore();
+
+      viewModel.updateReadCount(noticeId: 3, readCount: 1, totalCount: 2);
+      page1Gate.complete();
+      await loadMore;
+
+      final state = container.read(noticeListProvider(meetingId)).requireValue;
+      expect(state.notices, hasLength(25));
+      expect(state.notices[2].readCount, 1);
+      expect(state.isLoadingMore, isFalse);
+    });
+
+    test('다음 페이지 요청이 실패해도 그사이 바뀐 읽은 수는 유지된다', () async {
+      await openList();
+      final viewModel = container.read(noticeListProvider(meetingId).notifier);
+      final page1Gate = Completer<void>();
+      repository.pageGates[1] = page1Gate;
+      repository.pageErrors[1] = const NoticeException('시간 초과');
+      final loadMore = viewModel.loadMore();
+      final failure = expectLater(loadMore, throwsA(isA<NoticeException>()));
+
+      viewModel.updateReadCount(noticeId: 3, readCount: 1, totalCount: 2);
+      page1Gate.complete();
+      await failure;
+
+      final state = container.read(noticeListProvider(meetingId)).requireValue;
+      expect(state.notices, hasLength(20));
+      expect(state.notices[2].readCount, 1);
+      expect(state.isLoadingMore, isFalse);
+    });
+
     test('조회에 실패하면 에러 상태가 된다', () async {
       repository.error = const NoticeException('모임 구성원이 아닙니다.');
 

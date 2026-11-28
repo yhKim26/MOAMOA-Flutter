@@ -270,7 +270,7 @@ void main() {
       final requests = <RequestOptions>[];
       final repository = _repositoryWith(200, _readsBody, requests: requests);
 
-      await repository.getNoticeReadsByNoticeId(meetingId: 1, noticeId: 30);
+      await repository.getNoticeReadsInfoById(meetingId: 1, noticeId: 30);
 
       expect(requests.single.method, 'GET');
       expect(requests.single.path, '/v1/meetings/1/notices/30/reads');
@@ -279,7 +279,7 @@ void main() {
     test('읽음 현황의 읽은 수와 전체 구성원 수를 담는다', () async {
       final repository = _repositoryWith(200, _readsBody);
 
-      final reads = await repository.getNoticeReadsByNoticeId(
+      final reads = await repository.getNoticeReadsInfoById(
         meetingId: 1,
         noticeId: 30,
       );
@@ -291,7 +291,7 @@ void main() {
     test('읽은 구성원은 서버가 보낸 순서대로 읽은 시각과 함께 담는다', () async {
       final repository = _repositoryWith(200, _readsBody);
 
-      final reads = await repository.getNoticeReadsByNoticeId(
+      final reads = await repository.getNoticeReadsInfoById(
         meetingId: 1,
         noticeId: 30,
       );
@@ -309,7 +309,7 @@ void main() {
     test('읽음 현황 구성원의 profileColor 를 프로필 색으로 바꾼다', () async {
       final repository = _repositoryWith(200, _readsBody);
 
-      final reads = await repository.getNoticeReadsByNoticeId(
+      final reads = await repository.getNoticeReadsInfoById(
         meetingId: 1,
         noticeId: 30,
       );
@@ -331,7 +331,7 @@ void main() {
                                    "profileColor": "PINK"}]}}
       ''');
 
-      final reads = await repository.getNoticeReadsByNoticeId(
+      final reads = await repository.getNoticeReadsInfoById(
         meetingId: 1,
         noticeId: 30,
       );
@@ -343,7 +343,7 @@ void main() {
     test('읽지 않은 구성원은 읽은 시각 없이 담는다', () async {
       final repository = _repositoryWith(200, _readsBody);
 
-      final reads = await repository.getNoticeReadsByNoticeId(
+      final reads = await repository.getNoticeReadsInfoById(
         meetingId: 1,
         noticeId: 30,
       );
@@ -361,7 +361,7 @@ void main() {
                 "unreadMembers": [{"memberId": 9, "userName": null}]}}
     ''');
 
-      final reads = await repository.getNoticeReadsByNoticeId(
+      final reads = await repository.getNoticeReadsInfoById(
         meetingId: 1,
         noticeId: 30,
       );
@@ -377,7 +377,7 @@ void main() {
     ''');
 
       await expectLater(
-        repository.getNoticeReadsByNoticeId(meetingId: 1, noticeId: 30),
+        repository.getNoticeReadsInfoById(meetingId: 1, noticeId: 30),
         throwsA(
           isA<NoticeException>().having((e) => e.code, 'code', 'FORBIDDEN'),
         ),

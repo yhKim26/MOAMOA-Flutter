@@ -3,12 +3,12 @@ import 'package:dio/dio.dart';
 import '../models/create_notice_request.dart';
 import '../models/delete_notice_request.dart';
 import '../models/fetch_notice_detail_request.dart';
-import '../models/fetch_notice_reads_request.dart';
+import '../models/read_notice_request.dart';
 import '../models/fetch_notices_request.dart';
 import '../models/mark_notice_read_request.dart';
 import '../models/notice_list_model.dart';
 import '../models/notice_model.dart';
-import '../models/notice_reads_model.dart';
+import '../models/notice_reads_info.dart';
 import '../models/update_notice_request.dart';
 import 'notice_remote_data_source.dart';
 
@@ -73,13 +73,11 @@ class NoticeRemoteDataSourceImpl implements NoticeRemoteDataSource {
   }
 
   @override
-  Future<NoticeReadsModel> fetchNoticeReads(
-    FetchNoticeReadsRequest request,
-  ) async {
+  Future<NoticeReadsInfo> readNotice(ReadNoticeRequest request) async {
     final response = await _dio.get<Map<String, dynamic>>(
       '/v1/meetings/${request.meetingId}/notices/${request.noticeId}/reads',
     );
-    return NoticeReadsModel.fromJson(_data(response));
+    return NoticeReadsInfo.fromJson(_data(response));
   }
 
   /// 공통 응답 { success, data, error, timestamp } 에서 data 를 꺼냅니다.

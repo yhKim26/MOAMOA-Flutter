@@ -3,7 +3,7 @@
 // ignore_for_file: type=lint, type=warning, deprecated_member_use, deprecated_member_use_from_same_package
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
-part of 'notice_reads_model.dart';
+part of 'notice_reads_info.dart';
 
 // **************************************************************************
 // FreezedGenerator
@@ -14,22 +14,22 @@ part of 'notice_reads_model.dart';
 T _$identity<T>(T value) => value;
 
 /// @nodoc
-mixin _$NoticeReadsModel {
+mixin _$NoticeReadsInfo {
 
  int get readCount; int get totalCount; List<NoticeReadMemberModel> get readMembers; List<NoticeReadMemberModel> get unreadMembers;
-/// Create a copy of NoticeReadsModel
+/// Create a copy of NoticeReadsInfo
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
 @pragma('vm:prefer-inline')
-$NoticeReadsModelCopyWith<NoticeReadsModel> get copyWith => _$NoticeReadsModelCopyWithImpl<NoticeReadsModel>(this as NoticeReadsModel, _$identity);
+$NoticeReadsInfoCopyWith<NoticeReadsInfo> get copyWith => _$NoticeReadsInfoCopyWithImpl<NoticeReadsInfo>(this as NoticeReadsInfo, _$identity);
 
-  /// Serializes this NoticeReadsModel to a JSON map.
+  /// Serializes this NoticeReadsInfo to a JSON map.
   Map<String, dynamic> toJson();
 
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is NoticeReadsModel&&(identical(other.readCount, readCount) || other.readCount == readCount)&&(identical(other.totalCount, totalCount) || other.totalCount == totalCount)&&const DeepCollectionEquality().equals(other.readMembers, readMembers)&&const DeepCollectionEquality().equals(other.unreadMembers, unreadMembers));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is NoticeReadsInfo&&(identical(other.readCount, readCount) || other.readCount == readCount)&&(identical(other.totalCount, totalCount) || other.totalCount == totalCount)&&const DeepCollectionEquality().equals(other.readMembers, readMembers)&&const DeepCollectionEquality().equals(other.unreadMembers, unreadMembers));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -38,15 +38,15 @@ int get hashCode => Object.hash(runtimeType,readCount,totalCount,const DeepColle
 
 @override
 String toString() {
-  return 'NoticeReadsModel(readCount: $readCount, totalCount: $totalCount, readMembers: $readMembers, unreadMembers: $unreadMembers)';
+  return 'NoticeReadsInfo(readCount: $readCount, totalCount: $totalCount, readMembers: $readMembers, unreadMembers: $unreadMembers)';
 }
 
 
 }
 
 /// @nodoc
-abstract mixin class $NoticeReadsModelCopyWith<$Res>  {
-  factory $NoticeReadsModelCopyWith(NoticeReadsModel value, $Res Function(NoticeReadsModel) _then) = _$NoticeReadsModelCopyWithImpl;
+abstract mixin class $NoticeReadsInfoCopyWith<$Res>  {
+  factory $NoticeReadsInfoCopyWith(NoticeReadsInfo value, $Res Function(NoticeReadsInfo) _then) = _$NoticeReadsInfoCopyWithImpl;
 @useResult
 $Res call({
  int readCount, int totalCount, List<NoticeReadMemberModel> readMembers, List<NoticeReadMemberModel> unreadMembers
@@ -57,17 +57,17 @@ $Res call({
 
 }
 /// @nodoc
-class _$NoticeReadsModelCopyWithImpl<$Res>
-    implements $NoticeReadsModelCopyWith<$Res> {
-  _$NoticeReadsModelCopyWithImpl(this._self, this._then);
+class _$NoticeReadsInfoCopyWithImpl<$Res>
+    implements $NoticeReadsInfoCopyWith<$Res> {
+  _$NoticeReadsInfoCopyWithImpl(this._self, this._then);
 
-  final NoticeReadsModel _self;
-  final $Res Function(NoticeReadsModel) _then;
+  final NoticeReadsInfo _self;
+  final $Res Function(NoticeReadsInfo) _then;
 
-/// Create a copy of NoticeReadsModel
+/// Create a copy of NoticeReadsInfo
 /// with the given fields replaced by the non-null parameter values.
 @pragma('vm:prefer-inline') @override $Res call({Object? readCount = null,Object? totalCount = null,Object? readMembers = null,Object? unreadMembers = null,}) {
-  return _then(NoticeReadsModel(
+  return _then(NoticeReadsInfo(
 readCount: null == readCount ? _self.readCount : readCount // ignore: cast_nullable_to_non_nullable
 as int,totalCount: null == totalCount ? _self.totalCount : totalCount // ignore: cast_nullable_to_non_nullable
 as int,readMembers: null == readMembers ? _self.readMembers : readMembers // ignore: cast_nullable_to_non_nullable
@@ -79,8 +79,8 @@ as List<NoticeReadMemberModel>,
 }
 
 
-/// Adds pattern-matching-related methods to [NoticeReadsModel].
-extension NoticeReadsModelPatterns on NoticeReadsModel {
+/// Adds pattern-matching-related methods to [NoticeReadsInfo].
+extension NoticeReadsInfoPatterns on NoticeReadsInfo {
 /// A variant of `map` that fallback to returning `orElse`.
 ///
 /// It is equivalent to doing:
@@ -93,10 +93,10 @@ extension NoticeReadsModelPatterns on NoticeReadsModel {
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeMap<TResult extends Object?>(TResult Function( _NoticeReadsModel value)?  $default,{required TResult orElse(),}){
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>(TResult Function( _NoticeReadsInfo value)?  $default,{required TResult orElse(),}){
 final _that = this;
 switch (_that) {
-case _NoticeReadsModel() when $default != null:
+case _NoticeReadsInfo() when $default != null:
 return $default(_that);case _:
   return orElse();
 
@@ -115,10 +115,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult map<TResult extends Object?>(TResult Function( _NoticeReadsModel value)  $default,){
+@optionalTypeArgs TResult map<TResult extends Object?>(TResult Function( _NoticeReadsInfo value)  $default,){
 final _that = this;
 switch (_that) {
-case _NoticeReadsModel():
+case _NoticeReadsInfo():
 return $default(_that);case _:
   throw StateError('Unexpected subclass');
 
@@ -136,10 +136,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>(TResult? Function( _NoticeReadsModel value)?  $default,){
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>(TResult? Function( _NoticeReadsInfo value)?  $default,){
 final _that = this;
 switch (_that) {
-case _NoticeReadsModel() when $default != null:
+case _NoticeReadsInfo() when $default != null:
 return $default(_that);case _:
   return null;
 
@@ -159,7 +159,7 @@ return $default(_that);case _:
 
 @optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( int readCount,  int totalCount,  List<NoticeReadMemberModel> readMembers,  List<NoticeReadMemberModel> unreadMembers)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
-case _NoticeReadsModel() when $default != null:
+case _NoticeReadsInfo() when $default != null:
 return $default(_that.readCount,_that.totalCount,_that.readMembers,_that.unreadMembers);case _:
   return orElse();
 
@@ -180,7 +180,7 @@ return $default(_that.readCount,_that.totalCount,_that.readMembers,_that.unreadM
 
 @optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( int readCount,  int totalCount,  List<NoticeReadMemberModel> readMembers,  List<NoticeReadMemberModel> unreadMembers)  $default,) {final _that = this;
 switch (_that) {
-case _NoticeReadsModel():
+case _NoticeReadsInfo():
 return $default(_that.readCount,_that.totalCount,_that.readMembers,_that.unreadMembers);case _:
   throw StateError('Unexpected subclass');
 
@@ -200,7 +200,7 @@ return $default(_that.readCount,_that.totalCount,_that.readMembers,_that.unreadM
 
 @optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( int readCount,  int totalCount,  List<NoticeReadMemberModel> readMembers,  List<NoticeReadMemberModel> unreadMembers)?  $default,) {final _that = this;
 switch (_that) {
-case _NoticeReadsModel() when $default != null:
+case _NoticeReadsInfo() when $default != null:
 return $default(_that.readCount,_that.totalCount,_that.readMembers,_that.unreadMembers);case _:
   return null;
 
@@ -212,9 +212,9 @@ return $default(_that.readCount,_that.totalCount,_that.readMembers,_that.unreadM
 /// @nodoc
 @JsonSerializable()
 
-class _NoticeReadsModel implements NoticeReadsModel {
-  const _NoticeReadsModel({required this.readCount, required this.totalCount, required  List<NoticeReadMemberModel> readMembers, required  List<NoticeReadMemberModel> unreadMembers}): _readMembers = readMembers,_unreadMembers = unreadMembers;
-  factory _NoticeReadsModel.fromJson(Map<String, dynamic> json) => _$NoticeReadsModelFromJson(json);
+class _NoticeReadsInfo implements NoticeReadsInfo {
+  const _NoticeReadsInfo({required this.readCount, required this.totalCount, required  List<NoticeReadMemberModel> readMembers, required  List<NoticeReadMemberModel> unreadMembers}): _readMembers = readMembers,_unreadMembers = unreadMembers;
+  factory _NoticeReadsInfo.fromJson(Map<String, dynamic> json) => _$NoticeReadsInfoFromJson(json);
 
 @override final  int readCount;
 @override final  int totalCount;
@@ -233,20 +233,20 @@ class _NoticeReadsModel implements NoticeReadsModel {
 }
 
 
-/// Create a copy of NoticeReadsModel
+/// Create a copy of NoticeReadsInfo
 /// with the given fields replaced by the non-null parameter values.
 @override @JsonKey(includeFromJson: false, includeToJson: false)
 @pragma('vm:prefer-inline')
-_$NoticeReadsModelCopyWith<_NoticeReadsModel> get copyWith => __$NoticeReadsModelCopyWithImpl<_NoticeReadsModel>(this, _$identity);
+_$NoticeReadsInfoCopyWith<_NoticeReadsInfo> get copyWith => __$NoticeReadsInfoCopyWithImpl<_NoticeReadsInfo>(this, _$identity);
 
 @override
 Map<String, dynamic> toJson() {
-  return _$NoticeReadsModelToJson(this, );
+  return _$NoticeReadsInfoToJson(this, );
 }
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _NoticeReadsModel&&(identical(other.readCount, readCount) || other.readCount == readCount)&&(identical(other.totalCount, totalCount) || other.totalCount == totalCount)&&const DeepCollectionEquality().equals(other._readMembers, _readMembers)&&const DeepCollectionEquality().equals(other._unreadMembers, _unreadMembers));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _NoticeReadsInfo&&(identical(other.readCount, readCount) || other.readCount == readCount)&&(identical(other.totalCount, totalCount) || other.totalCount == totalCount)&&const DeepCollectionEquality().equals(other._readMembers, _readMembers)&&const DeepCollectionEquality().equals(other._unreadMembers, _unreadMembers));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -255,15 +255,15 @@ int get hashCode => Object.hash(runtimeType,readCount,totalCount,const DeepColle
 
 @override
 String toString() {
-  return 'NoticeReadsModel(readCount: $readCount, totalCount: $totalCount, readMembers: $readMembers, unreadMembers: $unreadMembers)';
+  return 'NoticeReadsInfo(readCount: $readCount, totalCount: $totalCount, readMembers: $readMembers, unreadMembers: $unreadMembers)';
 }
 
 
 }
 
 /// @nodoc
-abstract mixin class _$NoticeReadsModelCopyWith<$Res> implements $NoticeReadsModelCopyWith<$Res> {
-  factory _$NoticeReadsModelCopyWith(_NoticeReadsModel value, $Res Function(_NoticeReadsModel) _then) = __$NoticeReadsModelCopyWithImpl;
+abstract mixin class _$NoticeReadsInfoCopyWith<$Res> implements $NoticeReadsInfoCopyWith<$Res> {
+  factory _$NoticeReadsInfoCopyWith(_NoticeReadsInfo value, $Res Function(_NoticeReadsInfo) _then) = __$NoticeReadsInfoCopyWithImpl;
 @override @useResult
 $Res call({
  int readCount, int totalCount, List<NoticeReadMemberModel> readMembers, List<NoticeReadMemberModel> unreadMembers
@@ -274,17 +274,17 @@ $Res call({
 
 }
 /// @nodoc
-class __$NoticeReadsModelCopyWithImpl<$Res>
-    implements _$NoticeReadsModelCopyWith<$Res> {
-  __$NoticeReadsModelCopyWithImpl(this._self, this._then);
+class __$NoticeReadsInfoCopyWithImpl<$Res>
+    implements _$NoticeReadsInfoCopyWith<$Res> {
+  __$NoticeReadsInfoCopyWithImpl(this._self, this._then);
 
-  final _NoticeReadsModel _self;
-  final $Res Function(_NoticeReadsModel) _then;
+  final _NoticeReadsInfo _self;
+  final $Res Function(_NoticeReadsInfo) _then;
 
-/// Create a copy of NoticeReadsModel
+/// Create a copy of NoticeReadsInfo
 /// with the given fields replaced by the non-null parameter values.
 @override @pragma('vm:prefer-inline') $Res call({Object? readCount = null,Object? totalCount = null,Object? readMembers = null,Object? unreadMembers = null,}) {
-  return _then(_NoticeReadsModel(
+  return _then(_NoticeReadsInfo(
 readCount: null == readCount ? _self.readCount : readCount // ignore: cast_nullable_to_non_nullable
 as int,totalCount: null == totalCount ? _self.totalCount : totalCount // ignore: cast_nullable_to_non_nullable
 as int,readMembers: null == readMembers ? _self._readMembers : readMembers // ignore: cast_nullable_to_non_nullable

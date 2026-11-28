@@ -41,7 +41,7 @@ abstract interface class NoticeRepository {
   Future<void> markNoticeRead({required int meetingId, required int noticeId});
 
   /// 3-7 공지 읽음 현황. 읽은 구성원과 읽지 않은 구성원을 함께 돌려줍니다.
-  Future<NoticeReads> getNoticeReadsByNoticeId({
+  Future<NoticeReads> getNoticeReadsInfoById({
     required int meetingId,
     required int noticeId,
   });

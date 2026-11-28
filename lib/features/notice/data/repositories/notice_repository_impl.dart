@@ -9,12 +9,12 @@ import '../datasources/notice_remote_data_source.dart';
 import '../models/create_notice_request.dart';
 import '../models/delete_notice_request.dart';
 import '../models/fetch_notice_detail_request.dart';
-import '../models/fetch_notice_reads_request.dart';
+import '../models/read_notice_request.dart';
 import '../models/fetch_notices_request.dart';
 import '../models/mark_notice_read_request.dart';
 import '../models/notice_list_model.dart';
 import '../models/notice_model.dart';
-import '../models/notice_reads_model.dart';
+import '../models/notice_reads_info.dart';
 import '../models/update_notice_request.dart';
 
 /// DataSource 의 응답을 Entity 로 바꾸고, DioException 을 NoticeException 으로 바꿉니다.
@@ -107,13 +107,13 @@ class NoticeRepositoryImpl implements NoticeRepository {
   }
 
   @override
-  Future<NoticeReads> getNoticeReadsByNoticeId({
+  Future<NoticeReads> getNoticeReadsInfoById({
     required int meetingId,
     required int noticeId,
   }) {
     return _guard(() async {
-      final response = await _noticeRemoteDataSource.fetchNoticeReads(
-        FetchNoticeReadsRequest(meetingId: meetingId, noticeId: noticeId),
+      final response = await _noticeRemoteDataSource.readNotice(
+        ReadNoticeRequest(meetingId: meetingId, noticeId: noticeId),
       );
       return response.toEntity();
     });

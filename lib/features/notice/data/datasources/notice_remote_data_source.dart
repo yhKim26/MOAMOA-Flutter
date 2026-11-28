@@ -1,12 +1,12 @@
 import '../models/create_notice_request.dart';
 import '../models/delete_notice_request.dart';
 import '../models/fetch_notice_detail_request.dart';
-import '../models/fetch_notice_reads_request.dart';
+import '../models/read_notice_request.dart';
 import '../models/fetch_notices_request.dart';
 import '../models/mark_notice_read_request.dart';
 import '../models/notice_list_model.dart';
 import '../models/notice_model.dart';
-import '../models/notice_reads_model.dart';
+import '../models/notice_reads_info.dart';
 import '../models/update_notice_request.dart';
 
 /// 공지 API 호출
@@ -30,5 +30,5 @@ abstract interface class NoticeRemoteDataSource {
   Future<void> markNoticeRead(MarkNoticeReadRequest request);
 
   /// GET /v1/meetings/{meetingId}/notices/{noticeId}/reads
-  Future<NoticeReadsModel> fetchNoticeReads(FetchNoticeReadsRequest request);
+  Future<NoticeReadsInfo> readNotice(ReadNoticeRequest request);
 }

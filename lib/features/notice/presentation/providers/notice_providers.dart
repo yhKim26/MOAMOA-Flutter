@@ -112,29 +112,16 @@ final noticeReadProvider = FutureProvider.autoDispose
 ///
 /// 상세 화면의 "읽은 구성원" 이 구독합니다. 내 읽음 기록([noticeReadProvider])이 끝난 뒤 불러와
 /// 방금 읽은 나도 읽은 구성원에 들어갑니다. 실패하면 오류 상태가 되고, 화면에서 다시 시도합니다.
-///
-/// 받은 읽은 수로 공지 목록의 그 공지만 "읽음 N/M" 을 바꿉니다. 목록을 다시 불러오지 않아
-/// 더 불러온 페이지가 그대로 남습니다. 목록이 열려 있지 않거나 상세 화면이 먼저 닫혔으면 바꾸지 않습니다.
+/// 응답만 돌려줍니다. 공지 목록의 "읽음 N/M" 은 이 응답을 받은 화면이 바꿉니다.
 final noticeReadsProvider = FutureProvider.autoDispose
     .family<NoticeReads, NoticeDetailRequest>((ref, request) async {
       await ref.watch(noticeReadProvider(request).future);
-      final reads = await ref.watch(getNoticeReadsProvider)(
+      return ref.watch(getNoticeReadsProvider)(
         GetNoticeReadsParams(
           meetingId: request.meetingId,
           noticeId: request.noticeId,
         ),
       );
-      final listProvider = noticeListProvider(request.meetingId);
-      if (ref.mounted && ref.exists(listProvider)) {
-        ref
-            .read(listProvider.notifier)
-            .updateReadCount(
-              noticeId: request.noticeId,
-              readCount: reads.readCount,
-              totalCount: reads.totalCount,
-            );
-      }
-      return reads;
     });
 
 final noticeDeleteProvider = NotifierProvider.autoDispose

@@ -22,7 +22,7 @@ final class GetNoticeReadsImpl implements GetNoticeReads {
 
   @override
   Future<NoticeReads> call(GetNoticeReadsParams params) {
-    return _noticeRepository.getNoticeReadsByNoticeId(
+    return _noticeRepository.getNoticeReadsInfoById(
       meetingId: params.meetingId,
       noticeId: params.noticeId,
     );

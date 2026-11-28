@@ -12,6 +12,7 @@ import '../providers/notice_providers.dart';
 ///
 /// 읽은 구성원의 프로필 동그라미와 아직 안 읽은 구성원을 보여줍니다. 모임 구성원 누구나 봅니다.
 /// 불러오지 못하면 이 영역에서만 안내하고, 공지 내용은 그대로 보여줍니다.
+/// 읽음 현황을 받으면 공지 목록의 그 공지 "읽음 N/M" 도 바꿉니다.
 class NoticeReadsView extends ConsumerWidget {
   const NoticeReadsView({super.key, required this.request});
 
@@ -20,6 +21,7 @@ class NoticeReadsView extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final reads = ref.watch(noticeReadsProvider(request));
+    ref.listen(noticeReadsProvider(request), _updateListReadCount(ref));
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -82,6 +84,26 @@ class NoticeReadsView extends ConsumerWidget {
         ),
       ],
     );
+  }
+
+  /// 읽음 현황을 받으면 공지 목록에서 그 공지의 읽은 수만 바꾸는 listener 입니다.
+  ///
+  /// 목록이 열려 있지 않으면 목록을 새로 만들어 불러오지 않도록 바꾸지 않습니다.
+  /// 목록의 상태 확인은 [NoticeListViewModel.updateReadCount] 가 합니다.
+  void Function(AsyncValue<NoticeReads>?, AsyncValue<NoticeReads>)
+  _updateListReadCount(WidgetRef ref) {
+    return (_, next) {
+      final reads = next.value;
+      final listProvider = noticeListProvider(request.meetingId);
+      if (reads == null || !ref.exists(listProvider)) return;
+      ref
+          .read(listProvider.notifier)
+          .updateReadCount(
+            noticeId: request.noticeId,
+            readCount: reads.readCount,
+            totalCount: reads.totalCount,
+          );
+    };
   }
 }
 
