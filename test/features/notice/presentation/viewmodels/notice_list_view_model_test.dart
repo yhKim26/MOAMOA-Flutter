@@ -222,9 +222,9 @@ void main() {
     test('updateReadCount 는 목록이 오류 상태면 이전 목록으로 성공 상태를 만들지 않는다', () async {
       await openList();
       final viewModel = container.read(noticeListProvider(meetingId).notifier);
-      repository.error = const NoticeException(
-        '모임 구성원이 아닙니다.',
-        code: 'FORBIDDEN',
+      repository.error = const ApiException(
+        code: ApiErrorCode.forbidden,
+        message: '모임 구성원이 아닙니다.',
       );
       container.invalidate(noticeListProvider(meetingId));
       await Future<void>.delayed(Duration.zero);
@@ -235,7 +235,7 @@ void main() {
 
       final state = container.read(noticeListProvider(meetingId));
       expect(state.hasError, isTrue);
-      expect(state.error, isA<NoticeException>());
+      expect(state.error, isA<ApiException>());
     });
 
     test('다음 페이지 응답을 기다리는 사이에 바뀐 읽은 수는 이어 붙인 뒤에도 유지된다', () async {
@@ -260,9 +260,12 @@ void main() {
       final viewModel = container.read(noticeListProvider(meetingId).notifier);
       final page1Gate = Completer<void>();
       repository.pageGates[1] = page1Gate;
-      repository.pageErrors[1] = const NoticeException('시간 초과');
+      repository.pageErrors[1] = const ApiException(
+        code: ApiErrorCode.network,
+        message: '시간 초과',
+      );
       final loadMore = viewModel.loadMore();
-      final failure = expectLater(loadMore, throwsA(isA<NoticeException>()));
+      final failure = expectLater(loadMore, throwsA(isA<ApiException>()));
 
       viewModel.updateReadCount(noticeId: 3, readCount: 1, totalCount: 2);
       page1Gate.complete();

@@ -1130,9 +1130,9 @@ void main() {
           await tester.pump();
 
           // 읽음 현황 응답을 기다리는 사이에 목록 조회가 권한 오류로 실패합니다.
-          repository.error = const NoticeException(
-            '모임 구성원이 아닙니다.',
-            code: 'FORBIDDEN',
+          repository.error = const ApiException(
+            code: ApiErrorCode.forbidden,
+            message: '모임 구성원이 아닙니다.',
           );
           container.invalidate(noticeListProvider(1));
           await tester.pump();

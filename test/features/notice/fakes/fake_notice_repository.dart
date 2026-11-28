@@ -46,7 +46,7 @@ class FakeNoticeRepository implements NoticeRepository {
   final Map<int, Completer<void>> pageGates = {};
 
   /// 페이지별로 응답 대신 던질 예외. 붙잡아 둔 응답([pageGates])을 풀 때 던집니다.
-  final Map<int, NoticeException> pageErrors = {};
+  final Map<int, ApiException> pageErrors = {};
 
   /// 값이 있으면 getNoticeDetail 응답을 complete 될 때까지 붙잡아 둡니다.
   Completer<void>? detailGate;
